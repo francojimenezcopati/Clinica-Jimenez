@@ -1,0 +1,185 @@
+<form [formGroup]="credentials" class="mt-8 space-y-6" (ngSubmit)="onSubmit()">
+    <div class="flex items-center justify-center gap-5">
+        <input
+            class="hidden"
+            id="profileImg"
+            type="file"
+            accept="image/*"
+            (change)="onImageChange($event.target)"
+        />
+        <label
+            class="w-fit flex items-center justify-center mb-2 bg-slate-400 p-1 image hover:cursor-pointer"
+            for="profileImg"
+        >
+            <img class="w-32 h-32 image" [src]="this.profileImg" alt="" />
+            <img
+                class="w-9 -translate-x-24 translate-y-10 -m-[19px]"
+                src="auth/addPhoto.svg"
+                alt=""
+            />
+        </label>
+    </div>
+
+    <div class="space-y-4 rounded-md shadow-sm">
+        <div>
+            <input
+                id="nombre"
+                name="nombre"
+                type="text"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Nombre"
+                formControlName="nombre"
+            />
+            @if(this.handleFormErrors('nombre'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="apellido"
+                name="apellido"
+                type="text"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Apellido"
+                formControlName="apellido"
+            />
+            @if(this.handleFormErrors('apellido'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="edad"
+                name="edad"
+                type="number"
+                min="1"
+                max="120"
+                step="1"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Edad"
+                formControlName="edad"
+            />
+            @if(this.handleFormErrors('edad'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="dni"
+                name="dni"
+                type="number"
+                min="1"
+                step="1"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="DNI"
+                formControlName="dni"
+            />
+            @if(this.handleFormErrors('dni'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="email-address"
+                name="email"
+                type="email"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Correo electrónico"
+                formControlName="email"
+            />
+            @if(this.handleFormErrors('email'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Contraseña"
+                formControlName="password"
+            />
+            @if(this.handleFormErrors('password'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div
+            class="flex flex-col justify-center items-center w-full text-black"
+        >
+            <p-multiSelect
+                class="w-full self-center text-center"
+                [options]="this.especialidadesChoice"
+                formControlName="especialidades"
+                placeholder="Especialidades"
+                (onChange)="onEspecialidadesChange()"
+            />
+
+            @if(this.handleFormErrors('especialidades'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="otra"
+                name="otra"
+                type="text"
+                required
+                class=" w-full p-2 rounded {{
+                    this.otraEspecialidad?.disabled
+                        ? 'bg-gray-500'
+                        : 'bg-gray-700'
+                }}"
+                placeholder="Otra especialidad..."
+                formControlName="otraEspecialidad"
+            />
+            @if(this.handleFormErrors('otraEspecialidad'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+    </div>
+
+    <div>
+        <button
+            type="submit"
+            class="w-full text-black p-2 rounded"
+            [ngClass]="
+                credentials.valid
+                    ? 'bg-green-500 hover:bg-green-600'
+                    : 'bg-green-700 hover:bg-green-700'
+            "
+            [disabled]="!credentials.valid"
+        >
+            Registrarse
+        </button>
+    </div>
+</form>

@@ -1,0 +1,60 @@
+#logo {
+    animation: fill-animation 0.5s ease forwards 3.3s;
+}
+
+#logo path:nth-child(1) {
+    stroke-dasharray: 181.7755126953125;
+    stroke-dashoffset: 181.7755126953125;
+    animation: line-animation 1.6s ease forwards 1.8s; /* Delay de 1.8s */
+}
+
+#logo path:nth-child(2) {
+    stroke-dasharray: 203.82862854003906;
+    stroke-dashoffset: 203.82862854003906;
+    animation: line-animation 1.6s ease forwards 1.5s; /* Delay de 1.5s */
+}
+
+#logo path:nth-child(3) {
+    stroke-dasharray: 190.38258361816406;
+    stroke-dashoffset: 190.38258361816406;
+    animation: line-animation 1.6s ease forwards 1.2s; /* Delay de 1.2s */
+}
+
+#logo path:nth-child(4) {
+    stroke-dasharray: 203.82894897460938;
+    stroke-dashoffset: 203.82894897460938;
+    animation: line-animation 1.6s ease forwards 0.9s; /* Delay de 0.9s */
+}
+
+#logo path:nth-child(5) {
+    stroke-dasharray: 295.9888916015625;
+    stroke-dashoffset: 295.9888916015625;
+    animation: line-animation 1.6s ease forwards 0.6s; /* Delay de 0.6s */
+}
+
+#logo path:nth-child(6) {
+    stroke-dasharray: 120.57600402832031;
+    stroke-dashoffset: 120.57600402832031;
+    animation: line-animation 1.6s ease forwards 0.3s; /* Delay de 0.3s */
+}
+
+#logo path:nth-child(7) {
+    stroke-dasharray: 171.50994873046875;
+    stroke-dashoffset: 171.50994873046875;
+    animation: line-animation 1.6s ease forwards; /* Sin delay */
+}
+
+@keyframes line-animation {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes fill-animation {
+    from {
+        fill: transparent;
+    }
+    to {
+        fill: #ff0000;
+    }
+}

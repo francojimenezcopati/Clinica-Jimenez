@@ -1,0 +1,98 @@
+<div class="flex flex-col">
+    <main class="flex-1 flex items-center justify-center py-12 px-4 md:px-6">
+        <div
+            class="w-full max-w-md space-y-8 bg-gray-800 p-8 rounded-lg border-2 shadow-lg shadow-blue-200/50"
+        >
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-neon-yellow">
+                    @if (this.authType === 'login') { Iniciar Sesión }
+                    <!-- - -->
+                    @else if(this.authType === 'register'){ Registrarse }
+                    <!-- - -->
+                    @else{ Registrar usuarios}
+                </h2>
+                <p class="mt-2 text-sm">
+                    @if (this.authType === 'login') { Ingresa a tu cuenta para
+                    entrar a la clínica online }
+                    <!-- - -->
+                    @else if(this.authType === 'register'){ Crea una nueva
+                    cuenta para empezar en la clínica online }
+                    <!-- - -->
+                    @else{ Registra nuevos usuarios para la clínica }
+                </p>
+            </div>
+            @if(this.authType === 'login'){
+
+            <app-auth-form-login></app-auth-form-login>
+
+            }@else{
+
+            <div class="flex items-center justify-center !m-5 gap-4">
+                <div class="flex gap-1">
+                    <input
+                        type="radio"
+                        id="patient"
+                        name="type"
+                        value="patient"
+                        (change)="onValueChange('patient')"
+                        checked
+                    />
+                    <label for="patient">Paciente</label>
+                </div>
+                <div class="flex gap-1">
+                    <input
+                        type="radio"
+                        id="specialist"
+                        name="type"
+                        value="specialist"
+                        (change)="onValueChange('specialist')"
+                    />
+                    <label for="specialist">Especialista</label>
+                </div>
+
+                @if(this.authService.currentUserSig()?.role === 'admin'){
+                <div class="flex gap-1">
+                    <input
+                        type="radio"
+                        id="admin"
+                        name="type"
+                        value="admin"
+                        (change)="onValueChange('admin')"
+                    />
+                    <label for="admin">Admin</label>
+                </div>
+                }
+            </div>
+
+            @if(this.registerType === 'patient'){
+            <app-auth-form-patient></app-auth-form-patient>
+            }@else if(this.registerType === 'specialist'){
+            <app-auth-form-specialist></app-auth-form-specialist>
+            }@else{
+            <app-auth-form-admin></app-auth-form-admin>
+            }
+            <!-- - -->
+            }
+            <div class="text-center">
+                <p class="mt-2 text-sm text-neon-pink">
+                    @if (this.authType === 'login') { ¿No tienes una cuenta?
+                    <a
+                        routerLink="/auth/register"
+                        class="font-medium text-blue-500 hover:text-blue-500/70"
+                    >
+                        Regístrate aquí
+                    </a>
+                    } @else if(this.authType === 'register') { ¿Ya tienes una
+                    cuenta?
+                    <a
+                        routerLink="/auth/login"
+                        class="font-medium text-blue-500 hover:text-blue-500/70"
+                    >
+                        Ingresa aquí
+                    </a>
+                    }
+                </p>
+            </div>
+        </div>
+    </main>
+</div>

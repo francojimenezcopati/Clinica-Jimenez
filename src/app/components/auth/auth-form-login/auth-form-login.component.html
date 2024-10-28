@@ -1,0 +1,75 @@
+<form [formGroup]="credentials" class="mt-8 space-y-6" (ngSubmit)="onSubmit()">
+    <div class="space-y-4 rounded-md shadow-sm">
+        <div>
+            <label for="email-address" class="sr-only"
+                >Correo electrónico</label
+            >
+            <input
+                id="email-address"
+                name="email"
+                type="email"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Correo electrónico"
+                formControlName="email"
+            />
+            @if(this.handleFormErrors('email'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <label for="password" class="sr-only">Contraseña</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Contraseña"
+                formControlName="password"
+            />
+            @if(this.handleFormErrors('password'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+    </div>
+    <div>
+        <button
+            type="submit"
+            class="w-full text-black p-2 rounded"
+            [ngClass]="
+                email?.valid && password?.valid
+                    ? 'bg-green-500 hover:bg-green-600'
+                    : 'bg-green-700 hover:bg-green-700'
+            "
+            [disabled]="!(email?.valid && password?.valid)"
+        >
+            Iniciar Sesión
+        </button>
+    </div>
+    <div class="mt-5 flex gap-3">
+        <button
+            class="w-full bg-cyan-500 text-black hover:bg-cyan-600 p-2 rounded"
+            (click)="fillInGuest($event, 'patient')"
+        >
+            Paciente
+        </button>
+        <button
+            class="w-full bg-cyan-500 text-black hover:bg-cyan-600 p-2 rounded"
+            (click)="fillInGuest($event, 'specialist')"
+        >
+            Especialista
+        </button>
+        <button
+            class="w-full bg-cyan-500 text-black hover:bg-cyan-600 p-2 rounded"
+            (click)="fillInGuest($event, 'admin')"
+        >
+            Admin
+        </button>
+    </div>
+</form>

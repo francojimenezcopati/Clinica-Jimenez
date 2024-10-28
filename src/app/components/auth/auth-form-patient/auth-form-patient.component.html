@@ -1,0 +1,182 @@
+<form [formGroup]="credentials" class="mt-8 space-y-6" (ngSubmit)="onSubmit()">
+    <div class="flex items-center justify-center gap-5">
+        <input
+            class="hidden"
+            id="profileImg"
+            type="file"
+            accept="image/*"
+            (change)="onImageChange($event.target, 'main')"
+        />
+        <label
+            class="w-fit flex items-center justify-center mb-2 bg-slate-400 p-1 image hover:cursor-pointer"
+            for="profileImg"
+        >
+            <img class="w-32 h-32 image" [src]="this.profileImg" alt="" />
+            <img
+                class="w-9 -translate-x-24 translate-y-10 -m-[19px]"
+                src="auth/addPhoto.svg"
+                alt=""
+            />
+        </label>
+        <input
+            class="hidden"
+            id="profileImgAux"
+            type="file"
+            accept="image/*"
+            (change)="onImageChange($event.target, 'aux')"
+        />
+        <label
+            class="w-fit flex items-center justify-center mb-2 bg-slate-400 p-1 image hover:cursor-pointer"
+            for="profileImgAux"
+        >
+            <img class="w-20 h-20 image" [src]="this.profileImgAux" alt="" />
+            <img
+                class="w-5 -translate-x-16 translate-y-6 -m-[10px]"
+                src="auth/addPhoto.svg"
+                alt=""
+            />
+        </label>
+    </div>
+
+    <div class="space-y-4 rounded-md shadow-sm">
+        <div>
+            <input
+                id="nombre"
+                name="nombre"
+                type="text"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Nombre"
+                formControlName="nombre"
+            />
+            @if(this.handleFormErrors('nombre'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="apellido"
+                name="apellido"
+                type="text"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Apellido"
+                formControlName="apellido"
+            />
+            @if(this.handleFormErrors('apellido'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="edad"
+                name="edad"
+                type="number"
+                min="1"
+                max="120"
+                step="1"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Edad"
+                formControlName="edad"
+            />
+            @if(this.handleFormErrors('edad'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="dni"
+                name="dni"
+                type="number"
+                min="1"
+                step="1"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="DNI"
+                formControlName="dni"
+            />
+            @if(this.handleFormErrors('dni'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="obraSocial"
+                name="obraSocial"
+                type="text"
+                min="1"
+                step="1"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Obra social"
+                formControlName="obraSocial"
+            />
+            @if(this.handleFormErrors('obraSocial'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="email-address"
+                name="email"
+                type="email"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Correo electrónico"
+                formControlName="email"
+            />
+            @if(this.handleFormErrors('email'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+
+        <div>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="bg-gray-700 w-full p-2 rounded"
+                placeholder="Contraseña"
+                formControlName="password"
+            />
+            @if(this.handleFormErrors('password'); as error){
+            <span class="text-red-500 text-sm">
+                {{ error }}
+            </span>
+            }
+        </div>
+    </div>
+    <div>
+        <button
+            type="submit"
+            class="w-full text-black p-2 rounded"
+            [ngClass]="
+                credentials.valid
+                    ? 'bg-green-500 hover:bg-green-600'
+                    : 'bg-green-700 hover:bg-green-700'
+            "
+            [disabled]="!credentials.valid"
+        >
+            Registrarse
+        </button>
+    </div>
+</form>
