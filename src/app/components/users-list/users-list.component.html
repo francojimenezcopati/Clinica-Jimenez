@@ -1,0 +1,9 @@
+<div class="bg-gray-800 p-4 m-7 rounded-lg place-items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+    @if(this.users !== []){
+    <!-- - -->
+    @for(user of this.users; track user.uid){
+    <app-user-card class="m-3" [user]="user"></app-user-card>
+    }
+    <!-- - -->
+    }
+</div>

@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-auth-form-login',
@@ -76,28 +77,50 @@ export class AuthFormLoginComponent {
             });
     }
 
-    public fillInGuest(event: MouseEvent, guest: 'patient' | 'specialist' | 'admin') {
+    public fillInGuest(
+        event: MouseEvent,
+        guest: 'patient' | 'specialist' | 'admin'
+    ) {
         event.preventDefault(); // Evita el envío del formulario
         if (guest === 'patient') {
             this.credentials.setValue({
-                email: 'patient@patient.com',
+                email: 'patient@pokemail.net',
                 password: 'password',
             });
-        } else if(guest === 'specialist'){
+        } else if (guest === 'specialist') {
             this.credentials.setValue({
-                email: 'specialist@specialist.com',
+                email: 'specialist@pokemail.net',
                 password: 'password',
             });
-        }else{
+        } else {
             this.credentials.setValue({
-                email: 'admin@admin.com',
+                email: 'administrador@pokemail.net',
                 password: 'password',
             });
-		}
+        }
     }
 
     private handleAuthError(errorCode: string) {
         switch (errorCode) {
+            case 'auth/unverified-email':
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Email no verificado, por favor revisa tu bandeja de entrada',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
+                break;
+            case 'auth/user-disabled':
+                Swal.fire({
+                    title: 'Error',
+                    text: 'La cuenta del especialista esta deshabilitada',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6',
+                });
+                break;
+
             case 'auth/email-already-in-use':
                 this.toastr.error(
                     'El correo electrónico ya está en uso.',
@@ -121,12 +144,6 @@ export class AuthFormLoginComponent {
                 break;
             case 'auth/weak-password':
                 this.toastr.error('La contraseña es demasiado débil.', 'Error');
-                break;
-            case 'auth/user-disabled':
-                this.toastr.error(
-                    'La cuenta de usuario ha sido deshabilitada.',
-                    'Error'
-                );
                 break;
             case 'auth/user-not-found':
                 this.toastr.error(

@@ -23,10 +23,11 @@ export const appConfig: ApplicationConfig = {
         provideStorage(() => getStorage()),
         { provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig },
 
-        provideAnimations(), // for ngx-toastr
+        provideAnimations(), // for ngx-toastr & ngx-spinner
         provideToastr({
             positionClass: 'toast-bottom-right',
             closeButton: true,
         }),
+
     ],
 };

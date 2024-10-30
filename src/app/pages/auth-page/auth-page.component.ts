@@ -31,6 +31,7 @@ export class AuthPageComponent implements OnInit {
     constructor(private route: ActivatedRoute) {}
 
     ngOnInit(): void {
+        // console.log(this.route.parent?.url);
         this.route.url.subscribe((urlSegment) => {
             this.authType = urlSegment[0].path as
                 | 'login'

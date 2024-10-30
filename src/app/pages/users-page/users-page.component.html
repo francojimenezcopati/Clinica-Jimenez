@@ -1,1 +1,22 @@
-<p>users-page works!</p>
+<nav class="w-full flex justify-center items-center gap-6 mt-5">
+    <button
+        class="w-24 bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
+        (click)="this.verUsuarios = true"
+    >
+        Ver usuarios
+    </button>
+    <button
+        class="w-24 bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
+        (click)="this.verUsuarios = false"
+    >
+        Registrar usuarios
+    </button>
+</nav>
+
+@if(this.verUsuarios){
+<app-users-list [users]="this.users"></app-users-list>
+<!-- - -->
+}@else{
+
+<app-auth-page></app-auth-page>
+}
