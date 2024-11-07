@@ -41,6 +41,27 @@ export const routes: Routes = [
                 (m) => m.UsersPageComponent
             ),
     },
+    {
+        path: 'perfil',
+        loadComponent: () =>
+            import('./pages/perfil-page/perfil-page.component').then(
+                (m) => m.PerfilPageComponent
+            ),
+    },
+    {
+        path: 'solicitar-turno',
+        loadComponent: () =>
+            import(
+                './pages/solicitar-turno-page/solicitar-turno-page.component'
+            ).then((m) => m.SolicitarTurnoPageComponent),
+    },
+    {
+        path: 'mis-turnos',
+        loadComponent: () =>
+            import(
+                './pages/mis-turnos-page/mis-turnos-page.component'
+            ).then((m) => m.MisTurnosPageComponent),
+    },
 
     //
     //

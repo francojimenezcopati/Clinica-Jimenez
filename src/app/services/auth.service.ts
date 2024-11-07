@@ -13,6 +13,8 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { CollectionsNames } from '../utils/collections-names.enum';
 import {
     Especialista,
+    Horarios,
+    Paciente,
     UserDetails,
 } from '../interfaces/user-details.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -38,8 +40,10 @@ export class AuthService {
     private checkAuthChange() {
         this.auth.onAuthStateChanged((authUser) => {
             if (authUser && authUser.emailVerified) {
-                this.getUserFromFirestore(authUser).subscribe((user) => {
-                    this.currentUserSig.set(user.data() as UserDetails);
+                this.getUserFromFirestore(authUser).subscribe((userData) => {
+                    const user = userData.data();
+
+                    this.currentUserSig.set(user as UserDetails);
                     this.spinner.hide();
                 });
             } else {
@@ -49,14 +53,18 @@ export class AuthService {
         });
     }
 
+    private getHorariosOfSpecialist(user: UserDetails) {
+        return this.firestore
+            .doc<Horarios>(
+                `${CollectionsNames.HORARIOS_ESPECIALISTAS}/${user.uid}`
+            )
+            .get();
+    }
+
     private getUserFromFirestore(authUser: User) {
         return this.firestore
             .doc<UserDetails>(`${CollectionsNames.USERS}/` + authUser.uid)
             .get();
-    }
-
-    private isSpecialist(user: UserDetails): boolean {
-        return (user as Especialista).estaHabilitado !== undefined;
     }
 
     // Registro de usuarios, puede ser paciente, especialista o admin
@@ -99,7 +107,11 @@ export class AuthService {
             headers: {
                 'Content-Type': 'application/json', // Indica que el cuerpo de la solicitud es JSON
             },
-            body: JSON.stringify({ email: newUser.email, password: newUser.password, returnSecureToken: false }),
+            body: JSON.stringify({
+                email: newUser.email,
+                password: newUser.password,
+                returnSecureToken: false,
+            }),
         });
         const data = await res.json();
     }
@@ -141,7 +153,7 @@ export class AuthService {
     }
 
     private specialistFilter(userDetails: UserDetails) {
-        if (this.isSpecialist(userDetails)) {
+        if (userDetails.role === 'specialist') {
             if ((userDetails as Especialista).estaHabilitado === false) {
                 this.logout();
                 this.currentUserSig.set(null);

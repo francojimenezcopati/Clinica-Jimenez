@@ -10,12 +10,4 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
 })
-export class AppComponent {
-    title = 'clinica-jimenez';
-
-	aaa(){
-		setTimeout(() => {
-			
-		}, 10000);
-	}
-}
+export class AppComponent {}

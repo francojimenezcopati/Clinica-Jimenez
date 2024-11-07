@@ -20,4 +20,31 @@ export interface Paciente extends UserDetails {
 export interface Especialista extends UserDetails {
     especialidades: string[];
     estaHabilitado: boolean;
+    horariosDisponibles?: Horarios;
+    refToHorariosDisponibles?: string;
+}
+
+export type Horarios = {
+    lunes: string[];
+    martes: string[];
+    miercoles: string[];
+    jueves: string[];
+    viernes: string[];
+    sabado: string[];
+};
+
+export interface TurnoFirestore {
+    patientId: string;
+    specialistId: string;
+    especialidad: string;
+    dia: string;
+    hora: string;
+}
+
+export interface TurnoApp {
+    patient: Paciente;
+    specialist: Especialista;
+    especialidad: string;
+    dia: string;
+    hora: string;
 }

@@ -1,0 +1,59 @@
+<div class="flex flex-col justify-center items-center h-[calc(100vh-64px)]">
+    @if (this.authService.currentUserSig(); as currentUser) {
+
+    <div
+        class="p-4 m-4 rounded-lg bg-slate-700 flex justify-center items-center space-x-5"
+    >
+        <div class="w-fit">
+            <img
+                class="w-64 h-64 rounded-lg"
+                [src]="currentUser.imagenPerfil"
+                alt="img"
+            />
+        </div>
+        <div class="flex flex-col justify-between items-center space-y-3">
+            <span class="font-bold text-2xl text-white">{{
+                currentUser.nombre + " " + currentUser.apellido
+            }}</span>
+            <p class="text-slate-400">{{ currentUser.email }}</p>
+            <p class="text-xl">Edad: {{ currentUser.edad }}</p>
+            <p class="text-xl">DNI: {{ currentUser.dni }}</p>
+            <p class="text-xl">Rol: {{ currentUser.role }}</p>
+            @if(this.isPatient){
+
+            <p class="text-xl">
+                Obra social: {{ this.castToPaciente(currentUser).obraSocial }}
+            </p>
+
+            <div class="w-fit">
+                <img
+                    class="w-20 h-20 rounded-lg"
+                    [src]="this.castToPaciente(currentUser).imagenPerfilAux"
+                    alt="img"
+                />
+            </div>
+
+            }@else if(this.isSpecialist){
+
+            <p class="text-xl">
+                Especialidades:
+                {{
+                    this.castToEspecialista(currentUser).especialidades.join(
+                        ", "
+                    )
+                }}
+            </p>
+
+            <button
+                class="text-cyan-500 border-cyan-500 border rounded p-2 hover:bg-cyan-500/10 hover:text-white"
+                (click)="onHorarioClick()"
+            >
+                Seleccionar disponibilidad horaria
+            </button>
+
+            }
+        </div>
+    </div>
+
+    }
+</div>

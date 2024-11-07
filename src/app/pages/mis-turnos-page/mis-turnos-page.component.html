@@ -1,0 +1,33 @@
+<div
+    class="h-[calc(100vh-64px)] gap-5 place-items-center grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+>
+    @for(turno of this.turnos; track $index){
+
+    <div
+        class="bg-slate-700 rounded-xl p-4 flex flex-col justify-center items-center h-96 space-y-3 text-wrap overflow-x-hidden"
+    >
+        <div class="w-fit">
+            <img
+                class="w-52 h-52 rounded-lg"
+                [src]="turno.specialist.imagenPerfil"
+                alt="img"
+            />
+        </div>
+        <h2 class="font-bold text-xl">
+            {{ turno.especialidad.toUpperCase() }}
+        </h2>
+        <h2 class="font-semibold">
+            Especialista:
+            {{ turno.specialist.nombre + " " + turno.specialist.apellido }}
+        </h2>
+        <div
+            class="flex flex-col justify-center items-center text-slate-300 space-y-1"
+        >
+            <p class="text-slate-100">
+                {{ turno.dia.toUpperCase() + " a las " + turno.hora }}
+            </p>
+        </div>
+    </div>
+
+    }
+</div>

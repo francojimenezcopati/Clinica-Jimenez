@@ -25,8 +25,8 @@ import { AuthFormAdminComponent } from '../../components/auth/auth-form-admin/au
 export class AuthPageComponent implements OnInit {
     protected authService = inject(AuthService);
 
-    protected authType?: 'login' | 'register' | 'admin';
-    protected registerType: 'patient' | 'specialist' | 'admin' = 'patient';
+    protected authType!: 'login' | 'register' | 'admin';
+    protected registerType: 'patient' | 'specialist' | 'admin' | null = null;
 
     constructor(private route: ActivatedRoute) {}
 
@@ -40,7 +40,7 @@ export class AuthPageComponent implements OnInit {
         });
     }
 
-    onValueChange(type: 'patient' | 'specialist' | 'admin') {
+    onValueChange(type: 'patient' | 'specialist' | 'admin' | null) {
         this.registerType = type;
     }
 }

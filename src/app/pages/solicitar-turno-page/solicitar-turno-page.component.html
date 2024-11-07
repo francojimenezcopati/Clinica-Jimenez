@@ -1,0 +1,72 @@
+<div class="flex flex-col justify-center items-center h-[calc(100vh-64px)]">
+    @if (this.authService.currentUserSig(); as currentUser) {
+
+    <div
+        class="p-4 pb-6 m-4 rounded-lg bg-slate-700 flex flex-col justify-start items-center space-y-5 h-5/6 overflow-y-scroll"
+    >
+        @if(this.selectedSpecialtie === ''){
+
+        <h1 class="text-2xl font-bold m-6 mb-1">Elija la especialidad</h1>
+        @for(especialidad of this.uniqueSpecialties; track $index){
+        <button
+            class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black w-5/6"
+            (click)="onEspecialidadClick(especialidad)"
+        >
+            {{ especialidad }}
+        </button>
+        }
+        <!-- - -->
+        }@else if(this.selectedSpecialist === null){
+        <!-- - -->
+        @for(specialist of this.specialistsOfSelectedSpecialtie;track $index){
+
+        <button
+            class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black w-5/6"
+            (click)="onSpecialistClick(specialist)"
+        >
+            {{ specialist.nombre + " " + specialist.apellido }}
+        </button>
+
+        }
+        <!-- - -->
+        }@else{
+        <!-- - -->
+        @if(this.availableTurns !== null){
+        <!-- Mostrar horarios disponibles -->
+        @for (dia of this.dias; track $index) {
+        @if(this.availableTurns[dia].length !== 0){
+
+        <h1 class="text-lg font-semibold m-4 capitalize">
+            {{ dia }}
+        </h1>
+        <div class="flex flex-wrap gap-2">
+            @for (horario of this.availableTurns[dia]; track $index) {
+            <button
+                class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
+                (click)="onHorarioClick(dia, horario)"
+            >
+                {{ horario }}
+            </button>
+            }
+        </div>
+
+        }
+        <!-- - -->
+        }
+        <!-- - -->
+        }@else{
+
+        <h1 class="text-2xl font-bold m-10 mb-0">
+            El especialista no tiene turno disponibles
+        </h1>
+        <h1 class="text-2xl font-bold m-10 mt-0">
+            dentro de los siguientes 15 días
+        </h1>
+
+        }
+        <!-- - -->
+        }
+        <!-- - -->
+    </div>
+    }
+</div>

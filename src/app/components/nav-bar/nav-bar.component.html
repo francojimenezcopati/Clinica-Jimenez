@@ -9,7 +9,10 @@
     <nav class="ml-auto flex items-center gap-4 sm:gap-6">
         @if (this.authService.currentUserSig(); as currentUser) {
 
-        <div class="flex gap-2">
+        <button
+            class="flex gap-2 border-cyan-500 rounded p-1 m-1 hover:bg-cyan-500/10"
+            routerLink="/perfil"
+        >
             <div
                 class="w-fit flex items-center justify-center bg-slate-400 p-[2px] image"
             >
@@ -19,8 +22,10 @@
                     alt=""
                 />
             </div>
-            <span class="self-center">{{ currentUser.nombre + ' ' + currentUser.apellido }}</span>
-        </div>
+            <span class="self-center">{{
+                currentUser.nombre + " " + currentUser.apellido
+            }}</span>
+        </button>
 
         <button
             class="text-cyan-500 border-cyan-500 border rounded p-2 hover:bg-cyan-500/10 hover:text-white"

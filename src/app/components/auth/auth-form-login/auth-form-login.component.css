@@ -1,0 +1,17 @@
+/* Mostrar y ocultar el menú al hacer clic en el botón principal */
+.hidden {
+    display: none;
+}
+
+.show {
+    display: flex;
+    transform: scale(1); /* Escala normal para mostrar */
+}
+
+.transition {
+    transition: transform 0.3s ease-in-out; /* Transición de la escala */
+}
+
+.scale-0 {
+    transform: scale(0); 
+}
