@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/auth.service';
-import { Especialista } from '../../../interfaces/user-details.interface';
+import { DefinedSpecialties, Especialista } from '../../../interfaces/user-details.interface';
 import { ImageService } from '../../../services/image.service';
 
 import Swal from 'sweetalert2';
@@ -34,7 +34,7 @@ export class AuthFormSpecialistComponent {
 
     protected credentials: FormGroup;
 
-    protected especialidadesChoice = [
+    protected especialidadesChoice  = [
         'psicología',
         'fisioterapia',
         'urología',

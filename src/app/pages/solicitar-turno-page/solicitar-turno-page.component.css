@@ -1,0 +1,27 @@
+/* Aplica solo a la barra de desplazamiento dentro de la clase .scroll-container */
+.scroll-container {
+    scrollbar-width: thin; /* Para navegadores como Firefox */
+    scrollbar-color: #22d3ee #1e293b; /* Color de barra y track en Firefox */
+}
+
+/* Barra de desplazamiento en navegadores basados en WebKit (Chrome, Edge, Safari) */
+.scroll-container::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra de desplazamiento */
+}
+
+/* Track de la barra de desplazamiento */
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #1e293b; /* Color de fondo del track */
+    border-radius: 8px;
+}
+
+/* Barra de desplazamiento */
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #22d3ee; /* Color cian de la barra de desplazamiento */
+    border-radius: 8px;
+}
+
+/* Hover en la barra de desplazamiento */
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #0ea5e9; /* Color cian más oscuro en hover */
+}

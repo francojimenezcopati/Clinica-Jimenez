@@ -1,33 +1,51 @@
-<div
-    class="h-[calc(100vh-64px)] gap-5 place-items-center grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
->
-    @for(turno of this.turnos; track $index){
-
+<div class="flex justify-center items-center">
     <div
-        class="bg-slate-700 rounded-xl p-4 flex flex-col justify-center items-center h-96 space-y-3 text-wrap overflow-x-hidden"
+        class="w-5/6 bg-slate-400 rounded-lg shadow-lg shadow-slate-600 h-16 m-6 flex justify-center items-center"
     >
-        <div class="w-fit">
-            <img
-                class="w-52 h-52 rounded-lg"
-                [src]="turno.specialist.imagenPerfil"
-                alt="img"
-            />
-        </div>
-        <h2 class="font-bold text-xl">
-            {{ turno.especialidad.toUpperCase() }}
-        </h2>
-        <h2 class="font-semibold">
-            Especialista:
-            {{ turno.specialist.nombre + " " + turno.specialist.apellido }}
-        </h2>
-        <div
-            class="flex flex-col justify-center items-center text-slate-300 space-y-1"
-        >
-            <p class="text-slate-100">
-                {{ turno.dia.toUpperCase() + " a las " + turno.hora }}
-            </p>
-        </div>
+        <input
+            class="rounded-md w-full mx-4 h-10 p-2 text-black"
+            type="text"
+            placeholder="Filtra tus turnos..."
+        />
     </div>
+</div>
 
-    }
+<div class="h-[calc(100vh-64px)] mb-5 mx-6 flex justify-center items-start">
+    <div class="w-5/6 gap-14 justify-start items-start flex flex-wrap">
+        @for(turno of this.turnos; track $index){
+
+        <div
+            class="bg-slate-700 rounded-xl p-4 flex flex-col justify-between items-center h-[450px] w-[290px] space-y-3 text-wrap text-center overflow-x-hidden"
+        >
+            <div class="w-fit">
+                <img
+                    class="w-52 h-52 rounded-lg"
+                    [src]="turno.specialist.imagenPerfil"
+                    alt="img"
+                />
+            </div>
+            <h2 class="font-bold text-xl">
+                {{ turno.especialidad.toUpperCase() }}
+            </h2>
+            <h2 class="font-semibold">
+                Especialista:
+                {{ turno.specialist.nombre + " " + turno.specialist.apellido }}
+            </h2>
+            <div
+                class="flex flex-col justify-center items-center text-slate-300 space-y-1"
+            >
+                <p class="text-slate-100">
+                    {{ turno.fecha + " a las " + turno.hora }}
+                </p>
+                <p class="text-slate-100">Estado: 'falta hacer'</p>
+            </div>
+            <button
+                class="text-cyan-500 border-cyan-500 border rounded p-2 hover:bg-cyan-500/10 hover:text-white"
+            >
+                Action Button
+            </button>
+        </div>
+
+        }
+    </div>
 </div>

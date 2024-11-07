@@ -2,56 +2,67 @@
     @if (this.authService.currentUserSig(); as currentUser) {
 
     <div
-        class="p-4 pb-6 m-4 rounded-lg bg-slate-700 flex flex-col justify-start items-center space-y-5 h-5/6 overflow-y-scroll"
+        class="p-4 pb-6 m-4 rounded-lg bg-slate-700 flex flex-col justify-start items-center space-y-5 h-5/6 overflow-y-scroll scroll-container"
     >
-        @if(this.selectedSpecialtie === ''){
+        @if(this.selectedSpecialist === null){
 
-        <h1 class="text-2xl font-bold m-6 mb-1">Elija la especialidad</h1>
-        @for(especialidad of this.uniqueSpecialties; track $index){
-        <button
-            class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black w-5/6"
-            (click)="onEspecialidadClick(especialidad)"
-        >
-            {{ especialidad }}
-        </button>
-        }
-        <!-- - -->
-        }@else if(this.selectedSpecialist === null){
-        <!-- - -->
-        @for(specialist of this.specialistsOfSelectedSpecialtie;track $index){
-
-        <button
-            class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black w-5/6"
-            (click)="onSpecialistClick(specialist)"
-        >
-            {{ specialist.nombre + " " + specialist.apellido }}
-        </button>
-
-        }
-        <!-- - -->
-        }@else{
-        <!-- - -->
-        @if(this.availableTurns !== null){
-        <!-- Mostrar horarios disponibles -->
-        @for (dia of this.dias; track $index) {
-        @if(this.availableTurns[dia].length !== 0){
-
-        <h1 class="text-lg font-semibold m-4 capitalize">
-            {{ dia }}
+        <h1 class="text-2xl font-bold m-6 mb-1">
+            Elija a su especialista de confianza
         </h1>
-        <div class="flex flex-wrap gap-2">
-            @for (horario of this.availableTurns[dia]; track $index) {
+
+        @for(specialist of this.specialists;track $index){
+
+        <div class="flex flex-col justify-center items-center">
             <button
-                class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
-                (click)="onHorarioClick(dia, horario)"
+                class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded-lg text-black w-fit"
+                (click)="onSpecialistClick(specialist)"
             >
-                {{ horario }}
+                <img
+                    class="w-64 h-32 rounded-lg"
+                    [src]="specialist.imagenPerfil"
+                    alt="img"
+                />
             </button>
-            }
+            <span class="text-lg">
+                {{ specialist.nombre + " " + specialist.apellido }}
+            </span>
         </div>
 
         }
         <!-- - -->
+        }@else if(this.selectedSpecialtie === ''){
+        <!-- - -->
+
+        <button
+            class="bg-cyan-500 hover:bg-cyan-600 p-2 text-black rounded-full w-16 h-16 flex justify-center items-center absolute top-32 {{
+                this.availableTurns === null
+                    ? '-translate-x-[345px]'
+                    : '-translate-x-52'
+            }}"
+            (click)="onBackClicked(1)"
+        >
+            <img src="auth/backButton.svg" alt="" class="w-8" />
+        </button>
+
+        @if(this.availableTurns !== null){
+
+        <h1 class="text-2xl font-bold m-6 mb-1">Elija la especialidad</h1>
+
+        @for(especialidad of this.specialtiesOfSelectedSpecialist; track
+        $index){
+
+        <button
+            class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded-full text-black aspect-square flex items-center justify-center"
+            (click)="onEspecialidadClick(especialidad)"
+        >
+            <img
+                class="w-20 h-20 p-3"
+                [src]="this.imgsOfSpecialtiesFromSpecialist[$index]"
+                alt=""
+            />
+        </button>
+        {{ especialidad.toUpperCase() }}
+
         }
         <!-- - -->
         }@else{
@@ -65,8 +76,40 @@
 
         }
         <!-- - -->
+        }@else{
+
+        <button
+            class="bg-cyan-500 hover:bg-cyan-600 p-2 text-black rounded-full w-16 h-16 flex justify-center items-center absolute top-32 -translate-x-52"
+            (click)="onBackClicked(2)"
+        >
+            <img src="auth/backButton.svg" alt="" class="w-8" />
+        </button>
+
+        <h1 class="text-2xl font-bold m-6 mb-1">Elija día y horario</h1>
+
+        @for (fecha of this.fechas; track $index) {
+        @if(this.availableTurns![this.dias[$index]].length !== 0){
+
+        <h1 class="text-lg font-semibold m-4 capitalize">
+            {{ fecha }}
+        </h1>
+        <div class="flex flex-wrap gap-2">
+            @for (horario of this.availableTurns![this.dias[$index]]; track
+            $index) {
+            <button
+                class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded-md text-black aspect-square"
+                (click)="onHorarioClick(fecha, horario)"
+            >
+                {{ horario }}
+            </button>
+            }
+        </div>
+
         }
         <!-- - -->
+        }
+        <!-- - -->
+        }
     </div>
     }
 </div>

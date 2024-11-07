@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import {
+    DefinedSpecialties,
     Especialista,
     Horarios,
     TurnoFirestore,
@@ -28,22 +29,27 @@ export class SolicitarTurnoPageComponent {
     protected specialists: Especialista[] = [];
     protected uniqueSpecialties: string[] = [];
 
-    protected selectedSpecialtie: string = '';
-    protected specialistsOfSelectedSpecialtie: Especialista[] = [];
-
     protected selectedSpecialist: Especialista | null = null;
     protected availableTurns: Horarios | null = null;
 
+    protected selectedSpecialtie: string = '';
+    protected specialtiesOfSelectedSpecialist: string[] = [];
+
+    protected fechas: string[] = [];
     protected dias: (keyof Horarios)[] = [];
     protected horarios: string[] = [];
-    private daysOrder: (keyof Horarios)[] = [
-        'lunes',
-        'martes',
-        'miercoles',
-        'jueves',
-        'viernes',
-        'sabado',
-    ];
+
+    protected imgSpecialties: Record<DefinedSpecialties, string> = {
+        psicología: 'specialties/psicologia.svg',
+        fisioterapia: 'specialties/fisioterapia.svg',
+        urología: 'specialties/urologia.svg',
+        traumatología: 'specialties/traumatologia.svg',
+        pediatría: 'specialties/pediatria.svg',
+        cardiología: 'specialties/cardiologia.svg',
+    };
+    protected imgsOfSpecialtiesFromSpecialist: string[] = [];
+
+    private turnosReservados: TurnoFirestore[] = [];
 
     constructor() {
         this.userService.getAll().subscribe((users) => {
@@ -60,31 +66,50 @@ export class SolicitarTurnoPageComponent {
         });
     }
 
-    onEspecialidadClick(especialidad: string) {
-        this.selectedSpecialtie = especialidad;
-
-        this.specialistsOfSelectedSpecialtie = this.specialists.filter((s) =>
-            s.especialidades.includes(especialidad)
-        );
+    async ngOnInit() {
+        this.turnosReservados = await this.turnoService.getAll();
     }
 
     onSpecialistClick(specialist: Especialista) {
         this.selectedSpecialist = specialist;
         this.availableTurns = specialist.horariosDisponibles ?? null;
+        this.specialtiesOfSelectedSpecialist = specialist.especialidades;
 
+        // seteo url a imagenes
+        this.specialtiesOfSelectedSpecialist.forEach((s) => {
+            if (s in this.imgSpecialties) {
+                this.imgsOfSpecialtiesFromSpecialist.push(
+                    this.imgSpecialties[s as DefinedSpecialties]
+                );
+            } else {
+                this.imgsOfSpecialtiesFromSpecialist.push(
+                    'specialties/default.svg'
+                );
+            }
+        });
+
+        // if (this.availableTurns) {
+        //     this.fechas = Object.keys(this.availableTurns) as (keyof Horarios)[];
+        //     this.fechas.sort(
+        //         (a, b) => this.daysOrder.indexOf(a) - this.daysOrder.indexOf(b)
+        //     );
+        // }
         if (this.availableTurns) {
-            this.dias = Object.keys(this.availableTurns) as (keyof Horarios)[];
-            this.dias.sort(
-                (a, b) => this.daysOrder.indexOf(a) - this.daysOrder.indexOf(b)
-            );
+            this.generateNext15DaysWithAvailableTurns();
         }
     }
 
-    async onHorarioClick(dia: string, horario: string) {
+    onEspecialidadClick(especialidad: string) {
+        console.log(this.availableTurns);
+
+        this.selectedSpecialtie = especialidad;
+    }
+
+    async onHorarioClick(fecha: string, horario: string) {
         this.spinner.show();
 
         const turno: TurnoFirestore = {
-            dia,
+            fecha,
             hora: horario,
             especialidad: this.selectedSpecialtie,
             patientId: this.authService.currentUserSig()?.uid!,
@@ -105,5 +130,66 @@ export class SolicitarTurnoPageComponent {
         });
 
         this.router.navigateByUrl('/home');
+    }
+
+    private removeReservedsTurns(fecha: string, dia: keyof Horarios) {
+        this.turnosReservados.forEach((turno) => {
+            if (
+                turno.fecha === fecha &&
+                this.availableTurns![dia].includes(turno.hora)
+            ) {
+                this.availableTurns![dia] = this.availableTurns![dia].filter(
+                    (horario) => horario !== turno.hora
+                );
+            }
+        });
+    }
+
+    // Generates the next 15 days, formatted with available days from the specialist's schedule
+    private generateNext15DaysWithAvailableTurns() {
+        const today = new Date();
+        this.fechas = [];
+
+        for (let i = 1; i <= 15; i++) {
+            const day = new Date(today);
+            day.setDate(today.getDate() + i);
+
+            const formattedDate = `${day
+                .getDate()
+                .toString()
+                .padStart(2, '0')}-${(day.getMonth() + 1)
+                .toString()
+                .padStart(2, '0')} (${day.toLocaleDateString('es-ES', {
+                weekday: 'long',
+            })})`;
+
+            const weekday = day
+                .toLocaleDateString('es-ES', {
+                    weekday: 'long',
+                })
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') as keyof Horarios; // le saco los tildes
+
+            if (
+                this.availableTurns &&
+                this.availableTurns[weekday]?.length > 0
+            ) {
+                this.dias.push(weekday);
+                this.fechas.push(formattedDate);
+                this.removeReservedsTurns(formattedDate, weekday);
+            }
+        }
+    }
+
+    onBackClicked(stage: 1 | 2) {
+        if (stage === 1) {
+            this.selectedSpecialist = null;
+            this.availableTurns = null;
+            this.specialtiesOfSelectedSpecialist = [];
+            this.imgsOfSpecialtiesFromSpecialist = [];
+            this.fechas = [];
+        } else {
+            this.selectedSpecialtie = '';
+        }
     }
 }

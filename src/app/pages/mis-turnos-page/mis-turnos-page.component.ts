@@ -25,7 +25,6 @@ export class MisTurnosPageComponent {
         effect(async () => {
             this.spinner.show();
             const currentUser = this.authService.currentUserSig();
-            console.log(currentUser?.uid);
 
             if (currentUser?.uid) {
                 this.turnos = await this.turnoService.getTurnosPaciente(
@@ -33,9 +32,6 @@ export class MisTurnosPageComponent {
                 );
                 this.spinner.hide();
             }
-
-            console.log('ya ta');
-            console.log(this.turnos);
         });
     }
 }

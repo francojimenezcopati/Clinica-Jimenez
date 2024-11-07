@@ -37,7 +37,7 @@ export interface TurnoFirestore {
     patientId: string;
     specialistId: string;
     especialidad: string;
-    dia: string;
+    fecha: string;
     hora: string;
 }
 
@@ -45,6 +45,14 @@ export interface TurnoApp {
     patient: Paciente;
     specialist: Especialista;
     especialidad: string;
-    dia: string;
+    fecha: string;
     hora: string;
 }
+
+export type DefinedSpecialties =
+    | 'psicología'
+    | 'fisioterapia'
+    | 'urología'
+    | 'traumatología'
+    | 'pediatría'
+    | 'cardiología';

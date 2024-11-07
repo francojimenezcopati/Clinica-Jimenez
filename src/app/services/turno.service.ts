@@ -21,20 +21,21 @@ export class TurnoService {
 
     constructor() {}
 
-    public async getAll() {
-        const turnosFirestore = await this.firestore
-            .collection<TurnoFirestore>(CollectionsNames.TURNOS)
-            .valueChanges()
-            .toPromise();
+    public async getAllWithNestedObjects() {
+        const turnosFirestore = await firstValueFrom(
+            this.firestore
+                .collection<TurnoFirestore>(CollectionsNames.TURNOS)
+                .valueChanges()
+        );
 
         const turnosApp = await Promise.all(
             turnosFirestore?.map(async (turnoFirestore) => {
-                const patient = await this.userService
-                    .getOne(turnoFirestore.patientId)
-                    .toPromise();
-                const specialist = await this.userService
-                    .getOne(turnoFirestore.specialistId)
-                    .toPromise();
+                const patient = await firstValueFrom(
+                    this.userService.getOne(turnoFirestore.patientId)
+                );
+                const specialist = await firstValueFrom(
+                    this.userService.getOne(turnoFirestore.specialistId)
+                );
 
                 const { patientId, specialistId, ...turnoAppData } =
                     turnoFirestore;
@@ -48,6 +49,16 @@ export class TurnoService {
         );
 
         return turnosApp;
+    }
+
+    public async getAll() {
+        const turnosFirestore = await firstValueFrom(
+            this.firestore
+                .collection<TurnoFirestore>(CollectionsNames.TURNOS)
+                .valueChanges()
+        );
+
+        return turnosFirestore;
     }
 
     public async getTurnosPaciente(patientId: string): Promise<TurnoApp[]> {
