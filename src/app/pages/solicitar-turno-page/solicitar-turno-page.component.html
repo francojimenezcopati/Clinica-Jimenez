@@ -76,7 +76,7 @@
 
         }
         <!-- - -->
-        }@else{
+        }@else if(this.selectedFecha === null){
 
         <button
             class="bg-cyan-500 hover:bg-cyan-600 p-2 text-black rounded-full w-16 h-16 flex justify-center items-center absolute top-32 -translate-x-52"
@@ -107,6 +107,24 @@
 
         }
         <!-- - -->
+        }
+        <!-- - -->
+        }@else if(currentUser.role === 'admin' && this.patients !== []){
+
+        <button
+            class="bg-cyan-500 hover:bg-cyan-600 p-2 text-black rounded-full w-16 h-16 flex justify-center items-center absolute top-32 -translate-x-52"
+            (click)="onBackClicked(3)"
+        >
+            <img src="auth/backButton.svg" alt="" class="w-8" />
+        </button>
+
+        @for (patient of this.patients; track $index) {
+        <button
+            class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded-md text-black w-full"
+            (click)="onPatientClick(patient.uid!)"
+        >
+            {{ patient.nombre + " " + patient.apellido }}
+        </button>
         }
         <!-- - -->
         }

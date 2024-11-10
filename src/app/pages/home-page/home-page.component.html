@@ -92,14 +92,14 @@
                         class="bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
                         routerLink="/about-me"
                     >
-                        Saber más
+                        Sobre mí
                     </button>
                 </div>
             </div>
         </section>
         <section class="w-full pb-12 md:pb-24 lg:pb-32 bg-gray-900 px-10 mb-8">
             <div class="container px-4 md:px-6 pt-10">
-                @if (this.authService.currentUserSig()?.role === 'patient') {
+                @if (this.authService.currentUserSig(); as currentUser) {
 
                 <h2
                     class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8 py-8"
@@ -108,20 +108,40 @@
                 </h2>
 
                 <div class="flex justify-center items-center gap-10">
+                    @if(currentUser.role !== 'specialist'){
+
                     <button
                         class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 p-7 rounded-lg text-black"
                         routerLink="/solicitar-turno"
                     >
                         Solicitar turno
                     </button>
+
+                    } @if(currentUser.role !== 'admin'){
+
                     <button
                         class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 p-7 rounded-lg text-black"
                         routerLink="/mis-turnos"
                     >
                         Mis turnos
                     </button>
+
+                    }@else{
+                    <button
+                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 p-7 rounded-lg text-black"
+                        routerLink="/mis-turnos"
+                    >
+                        Todos los turnos
+                    </button>
+                    }
                 </div>
 
+                }@else{
+                <div class="w-full h-full flex justify-center items-center">
+                    <h2 class="text-2xl font-semibold">
+                        Inicia sesión para comenzar
+                    </h2>
+                </div>
                 }
             </div>
         </section>

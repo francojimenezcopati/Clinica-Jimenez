@@ -9,6 +9,13 @@ export const routes: Routes = [
             ),
     },
     {
+        path: 'about-me',
+        loadComponent: () =>
+            import('./pages/about-me-page/about-me-page.component').then(
+                (m) => m.AboutMePageComponent
+            ),
+    },
+    {
         path: 'auth',
         children: [
             {

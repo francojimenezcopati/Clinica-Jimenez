@@ -16,10 +16,19 @@ import { ImageService } from '../../../services/image.service';
 
 import Swal from 'sweetalert2';
 
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { environment } from '../../../../environments/environment';
+
 @Component({
     selector: 'app-auth-form-admin',
     standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, CommonModule],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule,
+        RecaptchaModule,
+        RecaptchaFormsModule,
+    ],
     templateUrl: './auth-form-admin.component.html',
     styleUrl: './auth-form-admin.component.css',
 })
@@ -29,6 +38,8 @@ export class AuthFormAdminComponent {
     protected credentials: FormGroup;
 
     protected profileImg: string;
+
+    protected environment = environment;
 
     constructor(
         private router: Router,
@@ -59,9 +70,15 @@ export class AuthFormAdminComponent {
             ],
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]],
+
+            recaptcha: ['', Validators.required],
         });
 
         this.profileImg = 'auth/DefaultUser.png';
+    }
+
+    onCaptchaResolved(token: string | null): void {
+        this.credentials.get('recaptcha')?.setValue(token);
     }
 
     public onImageChange(target: any) {
@@ -96,7 +113,7 @@ export class AuthFormAdminComponent {
             role: 'admin',
             imagenPerfil: urlMain,
         };
-		this.credentials.reset()
+        this.credentials.reset();
         this.registerAdmin(newAdmin);
     }
 

@@ -33,21 +33,34 @@ export type Horarios = {
     sabado: string[];
 };
 
-export interface TurnoFirestore {
-    patientId: string;
-    specialistId: string;
+interface Turno {
+    uid?: string;
     especialidad: string;
     fecha: string;
     hora: string;
+    estado: EstadoTurno;
+    comentario?: string;
+    reseña?: string;
+	encuesta?: string;
+	calificacion?: string
 }
 
-export interface TurnoApp {
+export interface TurnoFirestore extends Turno {
+    patientId: string;
+    specialistId: string;
+}
+
+export interface TurnoApp extends Turno {
     patient: Paciente;
     specialist: Especialista;
-    especialidad: string;
-    fecha: string;
-    hora: string;
 }
+
+export type EstadoTurno =
+    | 'solicitado'
+    | 'cancelado'
+    | 'aceptado'
+    | 'rechazado'
+    | 'finalizado';
 
 export type DefinedSpecialties =
     | 'psicología'

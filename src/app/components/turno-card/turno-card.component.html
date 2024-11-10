@@ -1,0 +1,74 @@
+<div
+    class="bg-slate-700 rounded-xl p-4 flex flex-col justify-between items-center h-[480px] w-[290px] space-y-3 text-wrap text-center overflow-x-hidden"
+>
+    @if(this.authService.currentUserSig(); as currentUser){
+
+    <div class="w-fit">
+        <img
+            class="w-52 h-52 rounded-lg"
+            [src]="
+                currentUser?.role === 'patient'
+                    ? turno.specialist.imagenPerfil
+                    : turno.patient.imagenPerfil
+            "
+            alt="img"
+        />
+    </div>
+
+    @if(currentUser?.role !== 'patient'){
+
+    <h2 class="font-bold text-xl">
+        {{ turno.patient.nombre + " " + turno.patient.apellido }}
+    </h2>
+
+    }
+
+    <h2 class="font-bold text-lg">
+        {{ turno.especialidad.toUpperCase() }}
+    </h2>
+
+    @if(currentUser?.role === 'admin'){
+
+    <h2 class="font-semibold">
+        Especialista:
+        {{ turno.specialist.nombre + " " + turno.specialist.apellido }}
+    </h2>
+
+    }
+
+    <p class="text-slate-300">
+        {{ turno.fecha + " a las " + turno.hora }}
+    </p>
+    <div class="flex gap-1">
+        <span class="text-cyan-400">Estado:</span>
+        <span class="font-semibold">{{ turno.estado }}</span>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-center items-center gap-4">
+        @if(this.defineButtonText(); as buttonText){
+
+        <button
+            class="text-cyan-500 border-cyan-500 border rounded p-2 hover:bg-cyan-500/10 hover:text-white"
+            (click)="onPrimaryButtonClick()"
+        >
+            {{ buttonText }}
+        </button>
+
+        }
+        <!-- - -->
+
+        @if(this.defineSecondButtonText(); as secondButtonText){
+
+        <button
+            class="text-cyan-500 border-cyan-500 border rounded p-2 hover:bg-cyan-500/10 hover:text-white"
+            (click)="onSecondaryButtonClick()"
+        >
+            {{ secondButtonText }}
+        </button>
+
+        }
+    </div>
+
+    }
+</div>

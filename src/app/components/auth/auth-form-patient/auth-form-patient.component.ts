@@ -16,10 +16,19 @@ import { ImageService } from '../../../services/image.service';
 
 import Swal from 'sweetalert2';
 
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { environment } from '../../../../environments/environment';
+
 @Component({
     selector: 'app-auth-form-patient',
     standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, CommonModule],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule,
+        RecaptchaModule,
+        RecaptchaFormsModule,
+    ],
     templateUrl: './auth-form-patient.component.html',
     styleUrl: './auth-form-patient.component.css',
 })
@@ -30,6 +39,8 @@ export class AuthFormPatientComponent {
 
     protected profileImg: string;
     protected profileImgAux: string;
+
+    protected environment = environment;
 
     constructor(
         private router: Router,
@@ -61,10 +72,16 @@ export class AuthFormPatientComponent {
             obraSocial: ['', [Validators.required]],
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]],
+
+            recaptcha: ['', Validators.required],
         });
 
         this.profileImg = 'auth/DefaultUser.png';
         this.profileImgAux = 'auth/DefaultUser.png';
+    }
+
+    onCaptchaResolved(token: string | null): void {
+        this.credentials.get('recaptcha')?.setValue(token);
     }
 
     protected handleFormErrors(controlName: string): string | null {
@@ -162,7 +179,7 @@ export class AuthFormPatientComponent {
             obraSocial: this.obraSocial?.value,
             imagenPerfilAux: urlAux,
         };
-		this.credentials.reset()
+        this.credentials.reset();
         this.registerPatient(newPatient);
     }
 

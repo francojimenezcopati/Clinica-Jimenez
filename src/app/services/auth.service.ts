@@ -165,6 +165,7 @@ export class AuthService {
 
     // Cierre de sesión
     logout() {
+        this.currentUserSig.set(null);
         return signOut(this.auth);
     }
 }

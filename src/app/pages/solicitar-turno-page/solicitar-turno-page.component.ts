@@ -5,6 +5,7 @@ import {
     DefinedSpecialties,
     Especialista,
     Horarios,
+    Paciente,
     TurnoFirestore,
 } from '../../interfaces/user-details.interface';
 import { TurnoService } from '../../services/turno.service';
@@ -35,6 +36,9 @@ export class SolicitarTurnoPageComponent {
     protected selectedSpecialtie: string = '';
     protected specialtiesOfSelectedSpecialist: string[] = [];
 
+    protected selectedFecha: string | null = null;
+    protected selectedHora: string | null = null;
+
     protected fechas: string[] = [];
     protected dias: (keyof Horarios)[] = [];
     protected horarios: string[] = [];
@@ -50,6 +54,8 @@ export class SolicitarTurnoPageComponent {
     protected imgsOfSpecialtiesFromSpecialist: string[] = [];
 
     private turnosReservados: TurnoFirestore[] = [];
+
+    protected patients: Paciente[] = [];
 
     constructor() {
         this.userService.getAll().subscribe((users) => {
@@ -67,7 +73,17 @@ export class SolicitarTurnoPageComponent {
     }
 
     async ngOnInit() {
-        this.turnosReservados = await this.turnoService.getAll();
+        this.turnoService
+            .getAll()
+            .subscribe((turnos) => (this.turnosReservados = turnos));
+
+        setTimeout(() => {
+            if (this.authService.currentUserSig()?.role === 'admin') {
+                this.userService
+                    .getAllPatients()
+                    .subscribe((patients) => (this.patients = patients));
+            }
+        }, 400);
     }
 
     onSpecialistClick(specialist: Especialista) {
@@ -88,32 +104,46 @@ export class SolicitarTurnoPageComponent {
             }
         });
 
-        // if (this.availableTurns) {
-        //     this.fechas = Object.keys(this.availableTurns) as (keyof Horarios)[];
-        //     this.fechas.sort(
-        //         (a, b) => this.daysOrder.indexOf(a) - this.daysOrder.indexOf(b)
-        //     );
-        // }
         if (this.availableTurns) {
             this.generateNext15DaysWithAvailableTurns();
         }
     }
 
     onEspecialidadClick(especialidad: string) {
-        console.log(this.availableTurns);
-
         this.selectedSpecialtie = especialidad;
     }
 
     async onHorarioClick(fecha: string, horario: string) {
+        if (this.authService.currentUserSig()?.role === 'admin') {
+            this.selectedFecha = fecha;
+            this.selectedHora = horario;
+        } else {
+            await this.saveTurn(fecha, horario);
+
+            this.router.navigateByUrl('/home');
+        }
+    }
+
+    async onPatientClick(patientId: string) {
+        await this.saveTurn(this.selectedFecha!, this.selectedHora!, patientId);
+
+        this.router.navigateByUrl('/home');
+    }
+
+    private async saveTurn(
+        fecha: string = this.selectedFecha!,
+        hora: string = this.selectedHora!,
+        patientId?: string
+    ) {
         this.spinner.show();
 
         const turno: TurnoFirestore = {
             fecha,
-            hora: horario,
+            hora,
             especialidad: this.selectedSpecialtie,
-            patientId: this.authService.currentUserSig()?.uid!,
+            patientId: patientId || this.authService.currentUserSig()?.uid!,
             specialistId: this.selectedSpecialist?.uid!,
+            estado: 'solicitado',
         };
         console.log(turno);
 
@@ -128,8 +158,6 @@ export class SolicitarTurnoPageComponent {
             confirmButtonText: 'OK',
             confirmButtonColor: '#3085d6',
         });
-
-        this.router.navigateByUrl('/home');
     }
 
     private removeReservedsTurns(fecha: string, dia: keyof Horarios) {
@@ -181,15 +209,18 @@ export class SolicitarTurnoPageComponent {
         }
     }
 
-    onBackClicked(stage: 1 | 2) {
+    onBackClicked(stage: 1 | 2 | 3) {
         if (stage === 1) {
             this.selectedSpecialist = null;
             this.availableTurns = null;
             this.specialtiesOfSelectedSpecialist = [];
             this.imgsOfSpecialtiesFromSpecialist = [];
             this.fechas = [];
-        } else {
+        } else if (stage === 2) {
             this.selectedSpecialtie = '';
+        } else {
+            this.selectedFecha = null;
+            this.selectedHora = null;
         }
     }
 }

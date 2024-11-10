@@ -17,6 +17,9 @@ import { ImageService } from '../../../services/image.service';
 import Swal from 'sweetalert2';
 import { MultiSelectModule } from 'primeng/multiselect';
 
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { environment } from '../../../../environments/environment';
+
 @Component({
     selector: 'app-auth-form-specialist',
     standalone: true,
@@ -25,6 +28,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
         ReactiveFormsModule,
         CommonModule,
         MultiSelectModule,
+        RecaptchaModule,
+        RecaptchaFormsModule,
     ],
     templateUrl: './auth-form-specialist.component.html',
     styleUrl: './auth-form-specialist.component.css',
@@ -45,6 +50,8 @@ export class AuthFormSpecialistComponent {
     ];
 
     protected profileImg: string;
+
+    protected environment = environment;
 
     constructor(
         private router: Router,
@@ -80,9 +87,15 @@ export class AuthFormSpecialistComponent {
                 { value: '', disabled: true },
                 [Validators.required],
             ],
+
+            recaptcha: ['', Validators.required],
         });
 
         this.profileImg = 'auth/DefaultUser.png';
+    }
+
+    onCaptchaResolved(token: string | null): void {
+        this.credentials.get('recaptcha')?.setValue(token);
     }
 
     protected handleFormErrors(controlName: string): string | null {

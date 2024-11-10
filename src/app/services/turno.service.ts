@@ -10,7 +10,7 @@ import {
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { CollectionsNames } from '../utils/collections-names.enum';
 import { UserService } from './user.service';
-import { firstValueFrom } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -21,82 +21,79 @@ export class TurnoService {
 
     constructor() {}
 
-    public async getAllWithNestedObjects() {
-        const turnosFirestore = await firstValueFrom(
-            this.firestore
-                .collection<TurnoFirestore>(CollectionsNames.TURNOS)
-                .valueChanges()
-        );
-
-        const turnosApp = await Promise.all(
-            turnosFirestore?.map(async (turnoFirestore) => {
-                const patient = await firstValueFrom(
-                    this.userService.getOne(turnoFirestore.patientId)
-                );
-                const specialist = await firstValueFrom(
-                    this.userService.getOne(turnoFirestore.specialistId)
-                );
-
-                const { patientId, specialistId, ...turnoAppData } =
-                    turnoFirestore;
-
-                return {
-                    ...turnoAppData,
-                    patient: patient?.data(),
-                    specialist: specialist?.data(),
-                } as TurnoApp;
-            }) || []
-        );
-
-        return turnosApp;
+    public getAll(): Observable<TurnoFirestore[]> {
+        return this.firestore
+            .collection<TurnoFirestore>(CollectionsNames.TURNOS)
+            .valueChanges();
     }
 
-    public async getAll() {
-        const turnosFirestore = await firstValueFrom(
-            this.firestore
-                .collection<TurnoFirestore>(CollectionsNames.TURNOS)
-                .valueChanges()
+    public getAllWithNestedObjects(): Observable<TurnoApp[]> {
+        return this.getAll().pipe(
+            switchMap((turnosFirestore) =>
+                this.mapTurnosFirestoreToTurnosApp(turnosFirestore)
+            )
         );
-
-        return turnosFirestore;
     }
 
-    public async getTurnosPaciente(patientId: string): Promise<TurnoApp[]> {
-        const turnosFirestore = await firstValueFrom(
-            this.firestore
-                .collection<TurnoFirestore>(CollectionsNames.TURNOS, (ref) =>
-                    ref.where('patientId', '==', patientId)
+    public getTurnosEspecialista(specialistId: string): Observable<TurnoApp[]> {
+        return this.firestore
+            .collection<TurnoFirestore>(CollectionsNames.TURNOS, (ref) =>
+                ref.where('specialistId', '==', specialistId)
+            )
+            .valueChanges()
+            .pipe(
+                switchMap((turnosFirestore) =>
+                    this.mapTurnosFirestoreToTurnosApp(turnosFirestore)
                 )
-                .valueChanges()
+            );
+    }
+
+    public getTurnosPaciente(patientId: string): Observable<TurnoApp[]> {
+        return this.firestore
+            .collection<TurnoFirestore>(CollectionsNames.TURNOS, (ref) =>
+                ref.where('patientId', '==', patientId)
+            )
+            .valueChanges()
+            .pipe(
+                switchMap((turnosFirestore) =>
+                    this.mapTurnosFirestoreToTurnosApp(turnosFirestore)
+                )
+            );
+    }
+
+    private mapTurnosFirestoreToTurnosApp(
+        turnosFirestore: TurnoFirestore[]
+    ): Observable<TurnoApp[]> {
+        return combineLatest(
+            turnosFirestore.map((turnoFirestore) =>
+                combineLatest({
+                    patient: this.userService.getOne(turnoFirestore.patientId),
+                    specialist: this.userService.getOne(
+                        turnoFirestore.specialistId
+                    ),
+                }).pipe(
+                    map(({ patient, specialist }) => {
+                        const { patientId, specialistId, ...turnoAppData } =
+                            turnoFirestore;
+                        return {
+                            ...turnoAppData,
+                            patient: patient?.data(),
+                            specialist: specialist?.data(),
+                        } as TurnoApp;
+                    })
+                )
+            )
         );
-
-        const turnosApp = await Promise.all(
-            turnosFirestore?.map(async (turnoFirestore) => {
-                const patient = await firstValueFrom(
-                    this.userService.getOne(turnoFirestore.patientId)
-                );
-                const specialist = await firstValueFrom(
-                    this.userService.getOne(turnoFirestore.specialistId)
-                );
-
-                const { patientId, specialistId, ...turnoAppData } =
-                    turnoFirestore;
-
-                return {
-                    ...turnoAppData,
-                    patient: patient?.data(),
-                    specialist: specialist?.data(),
-                } as TurnoApp;
-            }) || []
-        );
-
-        return turnosApp;
     }
 
     public saveTurno(turno: TurnoFirestore) {
-        return this.firestore
+        const docRef = this.firestore
             .collection<TurnoFirestore>(CollectionsNames.TURNOS)
-            .add(turno);
+            .doc();
+
+        const uid = docRef.ref.id;
+
+        return docRef.set({ ...turno, uid });
     }
 
     public getOne(userId: string) {
@@ -106,14 +103,8 @@ export class TurnoService {
     }
 
     public update(turno: TurnoFirestore) {
-        // return this.firestore
-        //     .doc<Turno>(CollectionsNames.TURNOS + '/' + turno.uid)
-        //     .update(turno);
-    }
-
-    public async updateSpecialist(specialist: Especialista) {
-        await this.firestore
-            .doc<Especialista>(CollectionsNames.TURNOS + '/' + specialist.uid)
-            .update(specialist);
+        return this.firestore
+            .doc<TurnoFirestore>(CollectionsNames.TURNOS + '/' + turno.uid)
+            .update(turno);
     }
 }

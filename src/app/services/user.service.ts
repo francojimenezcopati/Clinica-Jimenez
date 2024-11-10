@@ -22,6 +22,14 @@ export class UserService {
             .valueChanges();
     }
 
+    public getAllPatients() {
+        return this.firestore
+            .collection<Paciente>(CollectionsNames.USERS, (ref) =>
+                ref.where('role', '==', 'patient')
+            )
+            .valueChanges();
+    }
+
     public getOne(userId: string) {
         return this.firestore
             .doc<UserDetails>(CollectionsNames.USERS + '/' + userId)
