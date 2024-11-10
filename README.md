@@ -1,7 +1,5 @@
 <h1 align="center">Clínica online Jimenez</h1>
 
-<br/>
-
 <h2 align="left">Descripción</h2>
 <div align="left">
     <p>
