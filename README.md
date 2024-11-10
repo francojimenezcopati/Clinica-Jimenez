@@ -13,6 +13,44 @@
     </p>
 </div>
 
+## Para usar esta aplicación
+
+#### De forma online:
+
+https://clinica-jimenez.web.app/
+
+#### De forma local:
+
+- Clona este repositorio:
+
+```bash
+  git clone https://github.com/francojimenezcopati/Clinica-Jimenez.git
+```
+
+- Vé al directorio del proyecto:
+
+```bash
+  cd Clinica-Jimenez
+```
+
+- Instala las dependencias:
+
+```bash
+  npm install
+```
+
+- Si no tienes el CLI de Angular:
+
+```bash
+  npm install -g @angular/cli
+```
+
+- Corre el proyecto:
+
+```bash
+  ng serve
+```
+
 ## 📷 Imágenes de la aplicación
 
 ### Bienvenida a usuario anónimo
