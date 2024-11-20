@@ -69,6 +69,13 @@ export const routes: Routes = [
                 './pages/mis-turnos-page/mis-turnos-page.component'
             ).then((m) => m.MisTurnosPageComponent),
     },
+    {
+        path: 'pacientes',
+        loadComponent: () =>
+            import(
+                './pages/pacientes-page/pacientes-page.component'
+            ).then((m) => m.PacientesPageComponent),
+    },
 
     //
     //

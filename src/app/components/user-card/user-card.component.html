@@ -1,5 +1,7 @@
 <div
-    class="bg-slate-700 rounded-xl p-4 flex flex-col justify-center items-center w-56 h-96 space-y-3 text-wrap overflow-x-hidden"
+    class="bg-slate-700 rounded-xl p-4 flex flex-col justify-center items-center w-56 {{
+        this.isPacientesPage ? 'h-[506px]' : 'h-[390px]'
+    }} space-y-3 text-wrap overflow-y-hidden"
 >
     <img class="w-32 h-32 rounded-2xl" [src]="this.user.imagenPerfil" alt="" />
     <h2 class="font-bold">{{ this.user.nombre + " " + this.user.apellido }}</h2>
@@ -12,10 +14,33 @@
         <p class="">Rol: {{ this.user.role }}</p>
         <p class="font-bold text-cyan-400">{{ this.user.role }}</p>
     </div>
-	@if(this.user.role === 'specialist'){
-		<div class="flex gap-4">
-			<p>Habilitado:</p>
-			<p-inputSwitch [(ngModel)]="this.specialistActivated" (onChange)="onSwitchChange()"/>
-		</div>
-	}
+
+    @if(this.isPacientesPage){
+
+    <div class="flex flex-col items-center justify-center gap-1 text-slate-300">
+        <span>Últimos tres turnos:</span>
+        <ul>
+            @for(fecha of this.lastThreeTurnsDates; track $index){
+            <li>{{ fecha }}</li>
+            }
+        </ul>
+    </div>
+    }
+    <!-- - -->
+    @if(this.user.role === 'specialist'){
+    <div class="flex gap-4">
+        <p>Habilitado:</p>
+        <p-inputSwitch
+            [(ngModel)]="this.specialistActivated"
+            (onChange)="onSwitchChange()"
+        />
+    </div>
+    }@else if(this.user.role === 'patient'){
+    <button
+        class="text-cyan-500 border-cyan-500 border rounded p-2 hover:bg-cyan-500/10 hover:text-white"
+        (click)="onHistoriaClinicaClick()"
+    >
+        Historia clínica
+    </button>
+    }
 </div>

@@ -24,6 +24,14 @@ export interface Especialista extends UserDetails {
     refToHorariosDisponibles?: string;
 }
 
+export type DefinedSpecialties =
+    | 'psicología'
+    | 'fisioterapia'
+    | 'urología'
+    | 'traumatología'
+    | 'pediatría'
+    | 'cardiología';
+
 export type Horarios = {
     lunes: string[];
     martes: string[];
@@ -41,8 +49,9 @@ interface Turno {
     estado: EstadoTurno;
     comentario?: string;
     reseña?: string;
-	encuesta?: string;
-	calificacion?: string
+    encuesta?: string;
+    calificacion?: string;
+	historia?: HistoriaDatos
 }
 
 export interface TurnoFirestore extends Turno {
@@ -62,10 +71,12 @@ export type EstadoTurno =
     | 'rechazado'
     | 'finalizado';
 
-export type DefinedSpecialties =
-    | 'psicología'
-    | 'fisioterapia'
-    | 'urología'
-    | 'traumatología'
-    | 'pediatría'
-    | 'cardiología';
+export interface HistoriaDatos {
+    fijos: {
+        altura: number;
+        peso: number;
+        temperatura: number;
+        presion: number;
+    };
+    dinamicos?: { [key: string]: string };
+}

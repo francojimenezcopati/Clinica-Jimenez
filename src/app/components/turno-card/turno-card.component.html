@@ -7,7 +7,7 @@
         <img
             class="w-52 h-52 rounded-lg"
             [src]="
-                currentUser?.role === 'patient'
+                currentUser.role === 'patient'
                     ? turno.specialist.imagenPerfil
                     : turno.patient.imagenPerfil
             "
@@ -68,7 +68,7 @@
         </button>
 
         }
-    </div>
+   </div>
 
     }
 </div>

@@ -73,6 +73,12 @@ export class TurnoCardComponent {
                     return 'Rechazar turno';
                 case 'aceptado':
                     return 'Cancelar turno';
+                case 'finalizado':
+                    if (!this.turno.historia) {
+                        return 'Completar historia';
+                    } else {
+                        return null;
+                    }
                 default:
                     return null;
             }
@@ -159,6 +165,12 @@ export class TurnoCardComponent {
                         nextState: 'cancelado',
                         action: this.openComentarioModal,
                     };
+                case 'finalizado':
+                    if (!this.turno.historia) {
+                        return { action: this.openHistoriaModal };
+                    } else {
+                        return {};
+                    }
                 default:
                     return {};
             }
@@ -176,6 +188,123 @@ export class TurnoCardComponent {
                 }
             } else return {};
         }
+    }
+
+    private async openHistoriaModal() {
+        const dinamicos: { [key: string]: string } = {};
+
+        const { value: formValues } = await Swal.fire({
+            title: 'Historia Clínica',
+            html: `
+            <h2 class="text-2xl font-bold" style="text-align: center;">Campos fijos:</h2>
+            <input id="altura" type="number" class="swal2-input" placeholder="Altura (cm)" step="1">
+            <input id="peso" type="number" class="swal2-input" placeholder="Peso (kg)" step="0.1">
+            <input id="temperatura" type="number" class="swal2-input" placeholder="Temperatura (°C)" step="0.1">
+            <input id="presion" type="number" class="swal2-input" placeholder="Presión" step="1">
+            <h2 class="text-2xl font-bold my-4" style="text-align: center;">Campos dinámicos:</h2>
+            <div id="dinamicos-container"></div>
+            <button type="button" id="add-dinamico" class="swal2-confirm swal2-styled" style="margin-top: 10px;">+ Añadir campo dinámico</button>
+        `,
+            showCancelButton: true,
+            focusConfirm: false,
+            preConfirm: () => {
+                const altura = (
+                    document.getElementById('altura') as HTMLInputElement
+                ).value;
+                const peso = (
+                    document.getElementById('peso') as HTMLInputElement
+                ).value;
+                const temperatura = (
+                    document.getElementById('temperatura') as HTMLInputElement
+                ).value;
+                const presion = (
+                    document.getElementById('presion') as HTMLInputElement
+                ).value;
+
+                // Validación de campos fijos
+                if (!altura || !peso || !temperatura || !presion) {
+                    Swal.showValidationMessage(
+                        'Por favor, completa todos los campos fijos.'
+                    );
+                    return;
+                }
+
+                // Recolecta pares clave-valor dinámicos
+                const dinamicosContainer = document.getElementById(
+                    'dinamicos-container'
+                )!;
+                const claves = dinamicosContainer.querySelectorAll(
+                    '.dinamico-clave'
+                ) as NodeListOf<HTMLInputElement>;
+                const valores = dinamicosContainer.querySelectorAll(
+                    '.dinamico-valor'
+                ) as NodeListOf<HTMLInputElement>;
+
+                // Validación de campos dinámicos
+                for (let i = 0; i < claves.length; i++) {
+                    if (!claves[i].value || !valores[i].value) {
+                        Swal.showValidationMessage(
+                            'Por favor, completa todas las claves y valores de los campos dinámicos.'
+                        );
+                        return;
+                    }
+                    dinamicos[claves[i].value] = valores[i].value;
+                }
+
+                return {
+                    fijos: {
+                        altura: parseInt(altura),
+                        peso: parseFloat(peso),
+                        temperatura: parseFloat(temperatura),
+                        presion: parseInt(presion),
+                    },
+                    dinamicos,
+                };
+            },
+            didOpen: () => {
+                const addButton = document.getElementById('add-dinamico')!;
+                addButton.addEventListener('click', () => {
+                    const dinamicosContainer = document.getElementById(
+                        'dinamicos-container'
+                    )!;
+                    const currentCamposDinamicos =
+                        dinamicosContainer.querySelectorAll(
+                            '.dinamico-input'
+                        ).length;
+
+                    if (currentCamposDinamicos < 3) {
+                        const nuevoCampo = document.createElement('div');
+                        nuevoCampo.classList.add('dinamico-input');
+                        nuevoCampo.innerHTML = `
+                        <div class="flex justify-center items-center gap-1 my-2">
+                            <input type="text" class="swal2-input dinamico-clave !mr-0" placeholder="Clave" style="width: 100%;">
+                            <input type="text" class="swal2-input dinamico-valor !ml-0" placeholder="Valor" style="width: 100%;">
+                        </div>
+                    `;
+                        dinamicosContainer.appendChild(nuevoCampo);
+                    }
+
+                    // Oculta el botón si se alcanzó el límite
+                    if (currentCamposDinamicos + 1 >= 3) {
+                        addButton.style.display = 'none';
+                    }
+                });
+            },
+            width: '600px',
+        });
+
+        if (formValues) {
+            const { fijos, dinamicos } = formValues;
+            console.log('Datos fijos:', fijos);
+            console.log('Datos dinámicos:', dinamicos);
+
+            this.turno.historia = {
+                fijos,
+                dinamicos,
+            };
+			return true
+        }
+        return false;
     }
 
     private async openEncuestaModal() {
@@ -347,4 +476,4 @@ export class TurnoCardComponent {
 
         this.spinner.hide();
     }
-}
+	}

@@ -16,11 +16,18 @@
     <div class="w-5/6 gap-14 justify-start items-start flex flex-wrap">
         @if(this.authService.currentUserSig(); as currentUser){
         <!-- - -->
+		 @if(this.fileteredTurnos !== []){
+
         @for(turno of this.fileteredTurnos; track $index){
 
-        <app-turno-card [turno]="turno"></app-turno-card>
+        <app-turno-card 
+                class="animated-bounce opacity-0"
+                [ngStyle]="{'animation-delay': ($index * 0.1) + 's'}"
+				[turno]="turno"
+		></app-turno-card>
 
         }
+		 }
         <!-- - -->
         }
     </div>

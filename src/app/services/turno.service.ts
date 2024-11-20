@@ -61,6 +61,48 @@ export class TurnoService {
             );
     }
 
+    public getHistoriaClinicaPaciente(
+        patientId: string
+    ): Observable<TurnoApp[]> {
+        return this.firestore
+            .collection<TurnoFirestore>(CollectionsNames.TURNOS, (ref) =>
+                ref.where('patientId', '==', patientId)
+            )
+            .valueChanges()
+            .pipe(
+                map((turnosFirestore) =>
+                    // Filtra los turnos donde historia no sea undefined
+                    turnosFirestore.filter(
+                        (turno) => turno.historia !== undefined
+                    )
+                ),
+                switchMap((turnosFirestore) =>
+                    this.mapTurnosFirestoreToTurnosApp(turnosFirestore)
+                )
+            );
+    }
+
+    public getTurnosWithHistoriaEspecialista(
+        specialistId: string
+    ): Observable<TurnoApp[]> {
+        return this.firestore
+            .collection<TurnoFirestore>(CollectionsNames.TURNOS, (ref) =>
+                ref.where('specialistId', '==', specialistId)
+            )
+            .valueChanges()
+            .pipe(
+                map((turnosFirestore) =>
+                    // Filtra los turnos donde historia no sea undefined
+                    turnosFirestore.filter(
+                        (turno) => turno.historia !== undefined
+                    )
+                ),
+                switchMap((turnosFirestore) =>
+                    this.mapTurnosFirestoreToTurnosApp(turnosFirestore)
+                )
+            );
+    }
+
     private mapTurnosFirestoreToTurnosApp(
         turnosFirestore: TurnoFirestore[]
     ): Observable<TurnoApp[]> {

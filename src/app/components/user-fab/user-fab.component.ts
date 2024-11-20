@@ -2,6 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import {
     UserDetails,
     Especialista,
+    Paciente,
     TurnoApp,
 } from '../../interfaces/user-details.interface';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -15,13 +16,13 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
-    selector: 'app-user-card',
-    standalone: true,
-    imports: [InputSwitchModule, FormsModule],
-    templateUrl: './user-card.component.html',
-    styleUrl: './user-card.component.css',
+  selector: 'app-user-fab',
+  standalone: true,
+  imports: [],
+  templateUrl: './user-fab.component.html',
+  styleUrl: './user-fab.component.css'
 })
-export class UserCardComponent {
+export class UserFABComponent {
     private userService = inject(UserService);
     private turnoService = inject(TurnoService);
     private toastr = inject(ToastrService);

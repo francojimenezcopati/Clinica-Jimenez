@@ -1,0 +1,19 @@
+<div class="h-[calc(100vh-64px)] my-5 mx-6 flex justify-center items-start p-5">
+    <div class="w-5/6 gap-14 justify-start items-start flex flex-wrap">
+        @if(this.authService.currentUserSig(); as currentUser) {
+        <!-- - -->
+        @if(this.patientsWithHistory !== []) {
+        <!-- - -->
+        @for (paciente of this.patientsWithHistory; track $index) {
+            <app-user-card 
+                [user]="paciente"
+                class="animated-bounce opacity-0"
+                [ngStyle]="{'animation-delay': ($index * 0.1) + 's'}">
+            </app-user-card>
+        }
+        <!-- - -->
+        }
+        <!-- - -->
+        }
+    </div>
+</div>

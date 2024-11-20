@@ -25,3 +25,24 @@
 .scroll-container::-webkit-scrollbar-thumb:hover {
     background-color: #0ea5e9; /* Color cian más oscuro en hover */
 }
+
+@keyframes slideUpBounce {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(-10%);
+        opacity: 1;
+    }
+    80% {
+        transform: translateY(5%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.animated-slide-up-bounce {
+    animation: slideUpBounce 0.8s ease-out forwards;
+}

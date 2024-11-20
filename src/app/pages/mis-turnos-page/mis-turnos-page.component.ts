@@ -10,11 +10,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FormsModule } from '@angular/forms';
 import { TurnoCardComponent } from '../../components/turno-card/turno-card.component';
 import { tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-mis-turnos-page',
     standalone: true,
-    imports: [FormsModule, TurnoCardComponent],
+    imports: [FormsModule, TurnoCardComponent, CommonModule],
     templateUrl: './mis-turnos-page.component.html',
     styleUrl: './mis-turnos-page.component.css',
 })
@@ -53,9 +54,7 @@ export class MisTurnosPageComponent {
                         this.turnos = turnos;
                         this.fileteredTurnos = turnos;
                     });
-            } else {
-                this.spinner.hide();
-            }
+            } 
         });
     }
 
@@ -71,6 +70,28 @@ export class MisTurnosPageComponent {
         this.fileteredTurnos = this.turnos.filter((turno) => {
             let filters = '';
             filters += normalizeText(turno.especialidad);
+
+            if (turno.historia) {
+                filters += normalizeText(
+                    turno.historia.fijos.altura +
+                        ' ' +
+                        turno.historia.fijos.peso +
+                        ' ' +
+                        turno.historia.fijos.presion +
+                        ' ' +
+                        turno.historia.fijos.temperatura +
+                        ' ' +
+                        'altura peso presion temperatura'
+                );
+
+                if (turno.historia.dinamicos) {
+                    Object.entries(turno.historia.dinamicos).forEach(
+                        ([key, value]) => {
+                            filters += normalizeText(key + ' ' + value + ' ');
+                        }
+                    );
+                }
+            }
 
             if (this.authService.currentUserSig()?.role === 'specialist') {
                 filters += normalizeText(
