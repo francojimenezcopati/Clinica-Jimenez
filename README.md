@@ -37,7 +37,7 @@ https://clinica-jimenez.web.app/
   npm install
 ```
 
-- Si no tienes el CLI de Angular:
+- (opcional) Si no tienes el CLI de Angular:
 
 ```bash
   npm install -g @angular/cli
