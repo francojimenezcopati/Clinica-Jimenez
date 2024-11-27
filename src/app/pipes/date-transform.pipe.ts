@@ -1,10 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'dateDisplay',
+    name: 'dateTransform',
     standalone: true,
 })
-export class DateDisplayPipe implements PipeTransform {
+export class DateTransformPipe implements PipeTransform {
     transform(date: Date): string {
         const optionsDate: Intl.DateTimeFormatOptions = {
             day: '2-digit',

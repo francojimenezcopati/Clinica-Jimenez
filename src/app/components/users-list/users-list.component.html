@@ -4,11 +4,23 @@
     @if(this.users !== []){
     <!-- - -->
     @for(user of this.users; track user.uid){
+    <!-- - -->
+    @if(this.isCardStyle){
+
     <app-user-card
         class="animated-bounce opacity-0 m-3"
         [ngStyle]="{ 'animation-delay': $index * 0.1 + 's' }"
         [user]="user"
     ></app-user-card>
+    }@else{
+
+    <app-user-fab
+        class="animated-bounce opacity-0 m-3"
+        [ngStyle]="{ 'animation-delay': $index * 0.1 + 's' }"
+        [user]="user"
+    ></app-user-fab>
+    }
+    <!-- - -->
     }
     <!-- - -->
     }

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthPageComponent } from '../auth-page/auth-page.component';
 import { UserService } from '../../services/user.service';
-import { UserDetails } from '../../interfaces/user-details.interface';
+import { Paciente, UserDetails } from '../../interfaces/user-details.interface';
 import { UsersListComponent } from '../../components/users-list/users-list.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -14,20 +14,23 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class UsersPageComponent {
     private userService = inject(UserService);
-	private spinner = inject(NgxSpinnerService)
+    private spinner = inject(NgxSpinnerService);
 
-    protected verUsuarios = true;
+    protected componentSwitcher = [true, false, false];
 
     protected users: UserDetails[] = [];
+    protected patients: Paciente[] = [];
 
     constructor() {
-		this.spinner.show()
+        this.spinner.show();
 
         this.userService.getAll().subscribe((users) => {
             this.users = users;
-			this.spinner.hide()
+            this.patients = users.filter(
+                (user) => user.role === 'patient'
+            ) as Paciente[];
+
+            this.spinner.hide();
         });
     }
-
-
 }

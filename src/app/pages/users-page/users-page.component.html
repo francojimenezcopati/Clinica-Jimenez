@@ -1,22 +1,33 @@
 <nav class="w-full flex justify-center items-center gap-6 mt-5">
     <button
         class="w-24 bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
-        (click)="this.verUsuarios = true"
+        (click)="this.componentSwitcher = [true, false, false]"
     >
         Ver usuarios
     </button>
     <button
+        class="w-40 bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
+        (click)="this.componentSwitcher = [false, true, false]"
+    >
+        Descargar datos pacientes
+    </button>
+    <button
         class="w-24 bg-cyan-500 hover:bg-cyan-500/70 p-2 rounded text-black"
-        (click)="this.verUsuarios = false"
+        (click)="this.componentSwitcher = [false, false, true]"
     >
         Registrar usuarios
     </button>
 </nav>
 
-@if(this.verUsuarios){
-<app-users-list [users]="this.users"></app-users-list>
+@if(this.componentSwitcher[0]){
 <!-- - -->
-}@else{
+
+<app-users-list [users]="this.users" [isCardStyle]="true"></app-users-list>
+
+}@else if(this.componentSwitcher[1]){
+
+<app-users-list [users]="this.patients" [isCardStyle]="false"></app-users-list>
+} @else {
 
 <app-auth-page></app-auth-page>
 }

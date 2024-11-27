@@ -16,7 +16,7 @@ import { UserService } from '../../services/user.service';
 import { TurnoService } from '../../services/turno.service';
 
 import jsPDF from 'jspdf';
-import { DateDisplayPipe } from '../../pipes/date-display.pipe';
+import { DateTransformPipe } from '../../pipes/date-transform.pipe';
 
 @Component({
     selector: 'app-perfil-page',
@@ -24,13 +24,13 @@ import { DateDisplayPipe } from '../../pipes/date-display.pipe';
     imports: [],
     templateUrl: './perfil-page.component.html',
     styleUrl: './perfil-page.component.css',
-    providers: [DateDisplayPipe],
+    providers: [DateTransformPipe],
 })
 export class PerfilPageComponent {
     protected authService = inject(AuthService);
     private userService = inject(UserService);
     private turnoService = inject(TurnoService);
-    private dateDisplayPipe = inject(DateDisplayPipe);
+    private dateTransformPipe = inject(DateTransformPipe);
 
     protected isAdmin = false;
     protected isSpecialist = false;
@@ -344,7 +344,7 @@ export class PerfilPageComponent {
         doc.setFontSize(12);
         doc.text(`Paciente: ${patientName}`, 10, 80);
 
-        const currentDate = this.dateDisplayPipe.transform(new Date());
+        const currentDate = this.dateTransformPipe.transform(new Date());
         doc.text(`Fecha: ${currentDate}`, 10, 90);
 
         let currentY = 110; // Posición inicial en Y

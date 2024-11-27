@@ -10,11 +10,13 @@ import { TurnoService } from '../../services/turno.service';
 
 import Swal from 'sweetalert2';
 import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { EstadoTurnoPipe } from '../../pipes/estado-turno.pipe';
+
 
 @Component({
     selector: 'app-turno-card',
     standalone: true,
-    imports: [FormsModule],
+    imports: [FormsModule, EstadoTurnoPipe],
     templateUrl: './turno-card.component.html',
     styleUrl: './turno-card.component.css',
 })

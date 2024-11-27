@@ -4,7 +4,7 @@
     }} space-y-3 text-wrap overflow-y-hidden"
 >
     <img class="w-32 h-32 rounded-2xl" [src]="this.user.imagenPerfil" alt="" />
-    <h2 class="font-bold">{{ this.user.nombre + " " + this.user.apellido }}</h2>
+    <h2 [appHighlightRole]="this.user.role" class="font-bold text-black p-1 rounded-lg">{{ this.user | fullName }}</h2>
     <div
         class="flex flex-col justify-center items-center text-slate-300 space-y-1"
     >

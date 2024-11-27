@@ -13,11 +13,13 @@ import { TurnoService } from '../../services/turno.service';
 import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FullNamePipe } from '../../pipes/full-name.pipe'
+import { HighlightRoleDirective } from '../../directives/highlight-role.directive';
 
 @Component({
     selector: 'app-user-card',
     standalone: true,
-    imports: [InputSwitchModule, FormsModule],
+    imports: [InputSwitchModule, FormsModule, FullNamePipe, HighlightRoleDirective],
     templateUrl: './user-card.component.html',
     styleUrl: './user-card.component.css',
 })

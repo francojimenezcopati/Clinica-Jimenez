@@ -10,8 +10,9 @@
         @if (this.authService.currentUserSig(); as currentUser) {
 
         <button
-            class="flex gap-2 border-cyan-500 rounded p-1 m-1 hover:bg-cyan-500/10"
+            class="flex gap-2 border-cyan-500 rounded p-1 m-1 "
             routerLink="/perfil"
+			[appHighlight]="'#06b6d433'"
         >
             <div
                 class="w-fit flex items-center justify-center bg-slate-400 p-[2px] image"
