@@ -1,0 +1,129 @@
+<div class="flex flex-col justify-center items-center m-10 gap-8">
+    <div
+        class="p-4 border-gray-500 border bg-gray-700 grid place-items-center gap-4 rounded-lg h-80 w-full"
+    >
+        @if(this.lastLogins.length > 0){
+
+        <table class="min-w-full text-white h-52 overflow-y-scroll">
+            <thead>
+                <tr class="bg-gray-800">
+                    <th class="py-2 px-4 text-left border-gray-600 border">
+                        Usuario
+                    </th>
+                    <th class="py-2 px-4 text-left border-gray-600 border">
+                        Fecha
+                    </th>
+                    <th class="py-2 px-4 text-left border-gray-600 border">
+                        Hora
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(login of this.lastLogins;track $index){
+                <tr class="bg-gray-500">
+                    <td class="py-2 px-4 border border-gray-600">
+                        {{ login.user }}
+                    </td>
+                    <td class="py-2 px-4 border border-gray-600">
+                        {{ login.fecha }}
+                    </td>
+                    <td class="py-2 px-4 border border-gray-600">
+                        {{ login.hora }}
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <button
+            class="w-44 font-bold text-xl bg-cyan-500 hover:bg-cyan-500/70 p-3 rounded-lg text-black"
+            (click)="this.exportExcel()"
+        >
+            Generar Excel
+        </button>
+        }
+    </div>
+    <div class="flex justify-center items-center space-x-8">
+        <div
+            class="p-4 border-gray-500 border bg-gray-700 grid place-items-center gap-10 rounded-lg w-[360px]"
+        >
+            <canvas id="turnosPorEspecialidadChart"></canvas>
+
+            <button
+                class="w-40 font-bold text-xl bg-cyan-500 hover:bg-cyan-500/70 p-3 rounded-lg text-black"
+                (click)="this.downloadChartAsPDF('turnosPorEspecialidadChart')"
+            >
+                Generar PDF
+            </button>
+        </div>
+        <div
+            class="p-4 border-gray-500 border bg-gray-700 grid place-items-center gap-10 rounded-lg h-full w-[540px]"
+        >
+            <canvas id="turnosPorDiaChart"></canvas>
+            <button
+                class="w-40 font-bold text-xl bg-cyan-500 hover:bg-cyan-500/70 p-3 rounded-lg text-black"
+                (click)="this.downloadChartAsPDF('turnosPorDiaChart')"
+            >
+                Generar PDF
+            </button>
+        </div>
+    </div>
+    <div class="flex justify-center items-start space-x-8">
+        <div
+            class="p-4 border-gray-500 border bg-gray-700 grid place-items-center gap-5 rounded-lg w-[460px]"
+        >
+            <h2 class="text-3xl text-center my-3">
+                Cantidad de turnos solicitados por especialista desde...
+            </h2>
+            <input
+                class="text-black p-1 rounded-lg"
+                type="date"
+                (change)="
+                    this.loadTurnosSolicitadosMedicoLapso(
+                        $event.target!,
+                        'solicitado'
+                    )
+                "
+            />
+            <canvas
+                class="w-3/4"
+                id="turnosSolicitadosPorMedicoEnLapso"
+            ></canvas>
+            <button
+                class="w-40 font-bold text-xl bg-cyan-500 hover:bg-cyan-500/70 p-3 rounded-lg text-black"
+                (click)="
+                    this.downloadChartAsPDF('turnosSolicitadosPorMedicoEnLapso')
+                "
+            >
+                Generar PDF
+            </button>
+        </div>
+
+        <div
+            class="p-4 border-gray-500 border bg-gray-700 grid place-items-center gap-5 rounded-lg w-[460px]"
+        >
+            <h2 class="text-3xl text-center my-3">
+                Cantidad de turnos finalizados por especialista desde...
+            </h2>
+            <input
+                class="text-black p-1 rounded-lg"
+                type="date"
+                (change)="
+                    this.loadTurnosSolicitadosMedicoLapso(
+                        $event.target!,
+                        'finalizado'
+                    )
+                "
+            />
+            <canvas id="turnosFinalizadosPorMedicoEnLapso"></canvas>
+            <button
+                class="w-40 font-bold text-xl bg-cyan-500 hover:bg-cyan-500/70 p-3 rounded-lg text-black"
+                (click)="
+                    this.downloadChartAsPDF('turnosFinalizadosPorMedicoEnLapso')
+                "
+            >
+                Generar PDF
+            </button>
+        </div>
+    </div>
+</div>

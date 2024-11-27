@@ -1,5 +1,6 @@
 export enum CollectionsNames {
 	USERS = "users",
 	HORARIOS_ESPECIALISTAS = 'horarios-especialistas',
-	TURNOS = 'turnos'
+	TURNOS = 'turnos',
+	LOGS = 'logs'
 }

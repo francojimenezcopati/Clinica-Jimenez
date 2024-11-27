@@ -8,6 +8,7 @@ export interface UserDetails {
     password: string;
     role: 'patient' | 'specialist' | 'admin';
     imagenPerfil: string; // link al storage
+    lastLogin?: Date;
 }
 
 export interface Admin extends UserDetails {}
@@ -51,7 +52,7 @@ interface Turno {
     reseña?: string;
     encuesta?: string;
     calificacion?: string;
-	historia?: HistoriaDatos
+    historia?: HistoriaDatos;
 }
 
 export interface TurnoFirestore extends Turno {
@@ -79,4 +80,11 @@ export interface HistoriaDatos {
         presion: number;
     };
     dinamicos?: { [key: string]: string };
+}
+
+export interface Log {
+    fecha: string;
+    hora: string;
+    user: string;
+	date: Date
 }

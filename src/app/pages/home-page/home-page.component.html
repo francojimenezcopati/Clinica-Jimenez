@@ -111,26 +111,25 @@
                     @if(currentUser.role !== 'specialist'){
 
                     <button
-                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 p-7 rounded-lg text-black"
+                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 h-36 p-7 rounded-lg text-black"
                         routerLink="/solicitar-turno"
                     >
                         Solicitar turno
                     </button>
 
-                    } @if(currentUser.role !== 'admin'){
-
-					@if(currentUser.role === 'specialist'){
+                    } @if(currentUser.role !== 'admin'){ @if(currentUser.role
+                    === 'specialist'){
 
                     <button
-                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 p-7 rounded-lg text-black text-center flex justify-center items-center"
+                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 h-36 p-7 rounded-lg text-black text-center flex justify-center items-center"
                         routerLink="/pacientes"
                     >
                         Pacientes previos
                     </button>
-					}
+                    }
 
                     <button
-                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 p-7 rounded-lg text-black"
+                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 h-36 p-7 rounded-lg text-black"
                         routerLink="/mis-turnos"
                     >
                         Mis turnos
@@ -138,10 +137,16 @@
 
                     }@else{
                     <button
-                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 p-7 rounded-lg text-black"
+                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 h-36 p-7 rounded-lg text-black"
                         routerLink="/mis-turnos"
                     >
                         Todos los turnos
+                    </button>
+                    <button
+                        class="w-40 font-bold text-2xl bg-cyan-500 hover:bg-cyan-500/70 h-36 p-7 rounded-lg text-black"
+                        routerLink="/graphics"
+                    >
+                        Gráficos
                     </button>
                     }
                 </div>

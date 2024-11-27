@@ -76,6 +76,13 @@ export const routes: Routes = [
                 './pages/pacientes-page/pacientes-page.component'
             ).then((m) => m.PacientesPageComponent),
     },
+    {
+        path: 'graphics',
+        loadComponent: () =>
+            import(
+                './pages/graphics-page/graphics-page.component'
+            ).then((m) => m.GraphicsPageComponent),
+    },
 
     //
     //

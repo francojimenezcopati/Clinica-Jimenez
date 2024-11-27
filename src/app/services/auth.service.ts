@@ -14,12 +14,14 @@ import { CollectionsNames } from '../utils/collections-names.enum';
 import {
     Especialista,
     Horarios,
+    Log,
     Paciente,
     UserDetails,
 } from '../interfaces/user-details.interface';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FirebaseError } from '@angular/fire/app';
 import Swal from 'sweetalert2';
+import { LogsService } from './logs.service';
 
 @Injectable({
     providedIn: 'root',
@@ -28,6 +30,7 @@ export class AuthService {
     private firestore = inject(AngularFirestore);
     private auth = inject(Auth);
     private spinner = inject(NgxSpinnerService);
+    private logService = inject(LogsService);
     private readonly API_KEY = 'AIzaSyD1W0mOlJ6i374vTz7wfEcTDg0Fcm_Iy2Q';
 
     currentUserSig = signal<UserDetails | null | undefined>(undefined);
@@ -51,14 +54,6 @@ export class AuthService {
                 this.currentUserSig.set(null);
             }
         });
-    }
-
-    private getHorariosOfSpecialist(user: UserDetails) {
-        return this.firestore
-            .doc<Horarios>(
-                `${CollectionsNames.HORARIOS_ESPECIALISTAS}/${user.uid}`
-            )
-            .get();
     }
 
     private getUserFromFirestore(authUser: User) {
@@ -128,14 +123,14 @@ export class AuthService {
 
             this.currentUserSig.set(undefined);
 
-            // if (userCredentials.user.emailVerified === true) {
-            await this.updateUserSignal(userCredentials.user);
-            // } else {
-            //     this.logout();
-            //     this.currentUserSig.set(null);
-            //     this.spinner.hide();
-            //     throw new FirebaseError(AuthErrorCodes.UNVERIFIED_EMAIL, '');
-            // }
+            if (userCredentials.user.emailVerified === true) {
+                await this.updateUserSignal(userCredentials.user);
+            } else {
+                this.logout();
+                this.currentUserSig.set(null);
+                this.spinner.hide();
+                throw new FirebaseError(AuthErrorCodes.UNVERIFIED_EMAIL, '');
+            }
         } catch (error) {
             this.spinner.hide();
             throw error;
@@ -149,7 +144,23 @@ export class AuthService {
         this.specialistFilter(userDetails);
 
         this.currentUserSig.set(userDetails);
+
+        this.saveLog(userDetails);
+
         this.spinner.hide();
+    }
+
+    private async saveLog(user: UserDetails) {
+        const date = new Date();
+
+        const log: Log = {
+            fecha: date.toLocaleDateString(),
+            hora: date.toTimeString().slice(0, 5),
+            user: user.nombre + ' ' + user.apellido,
+			date
+        };
+
+        await this.logService.saveLog(log)
     }
 
     private specialistFilter(userDetails: UserDetails) {
